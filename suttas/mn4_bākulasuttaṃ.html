@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Bākulasuttaṃ - Majjhima Nikāya</title>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Gentium+Plus:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+            @media (min-width: 1200px) {
+            .container {
+                max-width: 95%;  /* Use 95% of screen width on large screens */
+            }
+        }
+    
+            :root {
+                --primary-color: #2c3e50;
+                --secondary-color: #3498db;
+                --accent-color: #e74c3c;
+                --success-color: #27ae60;
+                --bg-color: #f8f9fa;
+                --card-bg: #ffffff;
+                --text-color: #2c3e50;
+                --border-radius: 8px;
+                --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            }
+    
+            .dark-mode {
+                --bg-color: #1a1a1a;
+                --card-bg: #2d2d2d;
+                --text-color: #f0f0f0;
+                --shadow: 0 4px 6px rgba(0,0,0,0.3);
+            }
+    
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+    
+            body {
+                font-family: 'Times New Roman', serif;
+                background: var(--bg-color);
+                color: var(--text-color);
+                line-height: 1.8;
+                transition: all 0.3s ease;
+            }
+    
+            .container {
+    max-width: 1400px;  /* Increased from 1000px */
+    margin: 0 auto;
+    padding: 1px;
+}
+    
+            .sutta-header {
+                background: var(--card-bg);
+                padding: 30px;
+                border-radius: var(--border-radius);
+                box-shadow: var(--shadow);
+                margin-bottom: 30px;
+                text-align: center;
+            }
+    
+            .sutta-title {
+                font-size: 2em;
+                color: var(--primary-color);
+                margin-bottom: 10px;
+                font-weight: bold;
+            }
+    
+            .dark-mode .sutta-title {
+                color: #f0f0f0;
+            }
+    
+            .sutta-subtitle {
+                color: #7f8c8d;
+                font-size: 1.1em;
+            }
+    
+            .dark-mode .sutta-subtitle {
+                color: #95a5a6;
+            }
+    
+            .navigation {
+                display: flex;
+                justify-content: space-between;
+                margin: 30px 0;
+                padding: 20px;
+                background: var(--card-bg);
+                border-radius: var(--border-radius);
+                box-shadow: var(--shadow);
+            }
+    
+            .nav-btn {
+                padding: 10px 20px;
+                background: var(--secondary-color);
+                color: white;
+                text-decoration: none;
+                border-radius: 4px;
+                transition: all 0.3s ease;
+                font-weight: bold;
+            }
+    
+            .nav-btn:hover {
+                opacity: 0.9;
+                transform: translateY(-1px);
+            }
+    
+            .nav-btn.disabled {
+                background: #bdc3c7;
+                cursor: not-allowed;
+            }
+    
+            .dark-mode .nav-btn.disabled {
+                background: #555;
+            }
+    
+            .home-btn {
+                background: var(--accent-color);
+            }
+    
+            .paragraph {
+    position: relative;
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: 20px 20px 20px 50px;
+    margin-bottom: 15px;
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+    border-left: 3px solid var(--primary-color);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;  /* Increased gap for better separation */
+}
+
+
+/* Only add border when commentary is visible */
+
+.paragraph {
+    position: relative;
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: 20px 20px 20px 50px;
+    margin-bottom: 15px;
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+    border-left: 3px solid var(--primary-color);
+    display: block; /* Default: single column as block layout */
+    gap: 20px;
+}
+
+.paragraph.with-commentary {
+    display: grid; /* Only use grid when commentary is visible */
+    grid-template-columns: 1fr 1fr;
+}
+
+.mula-section {
+    padding-right: 0; /* No border by default */
+}
+
+.paragraph.with-commentary .mula-section {
+    border-right: 1px solid #ecf0f1;
+    padding-right: 30px;
+}
+commentary-section {
+    background: #f5f5f5;
+    padding: 20px;  /* Increased padding */
+    border-radius: 6px;
+    border-left: 3px solid #7f8c8d;
+}
+            .dark-mode .commentary-section {
+                background: #3a3a3a;
+                border-left-color: #95a5a6;
+            }
+    
+            .paragraph-number {
+                position: absolute;
+                left: 15px;
+                top: 25px;
+                color: #666;
+                font-size: 0.9em;
+                font-weight: normal;
+            }
+    
+            .dark-mode .paragraph-number {
+                color: #aaa;
+            }
+    
+            .pali-text {
+                font-size: 1.3em;
+                margin-bottom: 20px;
+                color: #2c3e50;
+                font-weight: bold;
+                line-height: 1.8;
+                font-family: 'Times New Roman', 'Gentium Plus', serif;
+            }
+    
+            .devanagari-script .pali-text {
+                font-family: sans-serif;
+            }
+    
+            .dark-mode .pali-text {
+                color: #f0f0f0;
+            }
+    
+            .translation-text {
+                font-size: 1.25em;
+                margin-bottom: 20px;
+                color: #222;
+                line-height: 1.2;
+                font-family: 'Gentium Plus','Heuristica', 'Georgia', serif;
+                font-weight: normal;
+            }
+    
+            .dark-mode .translation-text {
+                color: #e8e8e8;
+            }
+    
+            .commentary-pali {
+                font-size: 1.2em;
+                margin-bottom: 15px;
+                color: #2c3e50;
+                font-style: italic;
+                line-height: 1.8;
+                font-family: 'Times New Roman', 'Gentium Plus', serif;
+            }
+    
+            .devanagari-script .commentary-pali {
+                font-family: sans-serif;
+            }
+    
+            .dark-mode .commentary-pali {
+                color: #f0f0f0;
+            }
+    
+            .commentary-english {
+                font-size: 1.1em;
+                color: #333;
+                line-height: 1.6;
+                font-family: 'Gentium Plus', 'Heuristica', 'Georgia', serif;
+                font-weight: normal;
+            }
+    
+            .dark-mode .commentary-english {
+                color: #e0e0e0;
+            }
+    
+            .controls {
+                display: flex;
+                gap: 10px;
+                justify-content: center;
+                margin: 20px 0;
+                flex-wrap: wrap;
+            }
+    
+            .btn {
+                padding: 8px 16px;
+                border: none;
+                border-radius: 4px;
+                background: #95a5a6;
+                color: white;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                font-weight: bold;
+            }
+    
+            .btn:hover {
+                opacity: 0.9;
+                transform: translateY(-1px);
+            }
+    
+            .btn.active {
+                background: var(--success-color);
+            }
+    
+            .btn.toggle {
+                position: relative;
+            }
+    
+            .btn.toggle::after {
+                content: "❌";
+                margin-left: 8px;
+                font-size: 0.9em;
+            }
+    
+            .btn.toggle.active::after {
+                content: "✅";
+            }
+    
+            @media (max-width: 768px) {
+                .container {
+                    padding: 10px;
+                }
+                .sutta-header {
+                    padding: 20px;
+                }
+                .sutta-title {
+                    font-size: 1.5em;
+                }
+                .navigation {
+                    flex-direction: column;
+                    gap: 10px;
+                    text-align: center;
+                }
+                .paragraph {
+                    padding: 20px 20px 20px 45px;
+                    grid-template-columns: 1fr;
+                }
+                .mula-section {
+                    border-right: none;
+                    padding-right: 0;
+                    border-bottom: 1px solid #ecf0f1;
+                    padding-bottom: 20px;
+                }
+                .paragraph-number {
+                    left: 12px;
+                    top: 20px;
+                }
+                .controls {
+                    gap: 5px;
+                }
+                .btn {
+                    padding: 6px 12px;
+                    font-size: 0.9em;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="sutta-header">
+                <h1 class="sutta-title">Bākulasuttaṃ</h1>
+                <div class="sutta-subtitle">Majjhima Nikāya 4</div>
+            </div>
+    
+            <div class="navigation">
+                <a href="../nikayas/mn/index.html" class="nav-btn home-btn">&larr; Back to Majjhima Nikāya</a>
+            </div>
+    
+            <div class="controls">
+                <button class="btn toggle active" onclick="toggleView('mula_pali')">Pali Text</button>
+                <button class="btn toggle active" onclick="toggleView('mula_english')">Translation</button>
+                <button class="btn toggle" onclick="toggleView('commentary_pali')">Commentary Pali</button>
+                <button class="btn toggle" onclick="toggleView('commentary_english')">Commentary English</button>
+                <button class="btn toggle active" onclick="toggleScript()">Devanagari Script</button>
+                <button class="btn" onclick="toggleTheme()">Dark/Light</button>
+            </div>
+    
+            <div id="content">
+    
+                <div class="paragraph">
+                    <div class="paragraph-number">209</div>
+                    <div class="mula-section">
+                        <div class="pali-text mula-pali-section" data-pali="209. Evaṃ  me sutaṃ – ekaṃ samayaṃ āyasmā bākulo bakkulo (sī. syā. kaṃ. pī.) rājagahe viharati veḷuvane kalandakanivāpe. Atha kho acelakassapo āyasmato  bākulassa purāṇagihisahāyo yenāyasmā  bākulo tenupasaṅkami; upasaṅkamitvā āyasmatā bākulena saddhiṃ sammodi. Sammodanīyaṃ kathaṃ sāraṇīyaṃ vītisāretvā ekamantaṃ nisīdi. Ekamantaṃ nisinno kho acelakassapo āyasmantaṃ bākulaṃ etadavoca – ‘‘Kīvaciraṃ pabbajitosi, āvuso bākulā’’ti? ‘‘Asīti me, āvuso, vassāni pabbajitassā’’ti. ‘‘Imehi pana te, āvuso bākula, asītiyā vassehi katikkhattuṃ methuno dhammo paṭisevito’’ti? ‘‘Na kho maṃ, āvuso kassapa, evaṃ pucchitabbaṃ – ‘imehi pana te, āvuso bākula, asītiyā vassehi katikkhattuṃ methuno dhammo paṭisevito’ti. Evañca kho maṃ, āvuso kassapa, pucchitabbaṃ – ‘imehi pana te, āvuso bākula, asītiyā vassehi katikkhattuṃ kāmasaññā uppannapubbā’’’ti? ( ) (imehi pana te āvuso bakkula asītiyo vassehi katikkhattuṃ kāmasaññā uppannapubbāti.) (sī. pī.) (imehi pana te āvuso bakkula asītiyo vassehi katikkhattuṃ kāmasaññā uppannapubbāti.) (sī. pī.)">209. Evaṃ  me sutaṃ – ekaṃ samayaṃ āyasmā bākulo bakkulo (sī. syā. kaṃ. pī.) rājagahe viharati veḷuvane kalandakanivāpe. Atha kho acelakassapo āyasmato  bākulassa purāṇagihisahāyo yenāyasmā  bākulo tenupasaṅkami; upasaṅkamitvā āyasmatā bākulena saddhiṃ sammodi. Sammodanīyaṃ kathaṃ sāraṇīyaṃ vītisāretvā ekamantaṃ nisīdi. Ekamantaṃ nisinno kho acelakassapo āyasmantaṃ bākulaṃ etadavoca – ‘‘Kīvaciraṃ pabbajitosi, āvuso bākulā’’ti? ‘‘Asīti me, āvuso, vassāni pabbajitassā’’ti. ‘‘Imehi pana te, āvuso bākula, asītiyā vassehi katikkhattuṃ methuno dhammo paṭisevito’’ti? ‘‘Na kho maṃ, āvuso kassapa, evaṃ pucchitabbaṃ – ‘imehi pana te, āvuso bākula, asītiyā vassehi katikkhattuṃ methuno dhammo paṭisevito’ti. Evañca kho maṃ, āvuso kassapa, pucchitabbaṃ – ‘imehi pana te, āvuso bākula, asītiyā vassehi katikkhattuṃ kāmasaññā uppannapubbā’’’ti? ( ) (imehi pana te āvuso bakkula asītiyo vassehi katikkhattuṃ kāmasaññā uppannapubbāti.) (sī. pī.) (imehi pana te āvuso bakkula asītiyo vassehi katikkhattuṃ kāmasaññā uppannapubbāti.) (sī. pī.)</div>
+                        <div class="translation-text mula-english-section">Thus have I heard:<br><br>At one time the venerable Bākula was staying at Rājagaha in the Bamboo Grove, the Squirrel’s Feeding Ground ( <i>veḷuvane kalandakanivāpe</i> ). Then Acela Kassapa, a former companion of the venerable Bākula in his lay life, went to the venerable Bākula and exchanged greetings with him (<i>sammodi</i>). When this courteous and amiable talk was finished (<i>sammodanīyaṃ kathaṃ sāraṇīyaṃ vītisāretvā</i>), he sat down at one side (<i>ekamantaṃ nisīdi</i>). Seated to one side, Acela Kassapa said to the venerable Bākula:<br><br>“How long is it, friend Bākula, since you went forth?”<br><br>“It is eighty years, friend, since I went forth.”<br><br>“In these eighty years, friend Bākula, how many times have you engaged in the sexual act ( <i>methuno dhammo paṭisevito</i> )?”<br><br>“Friend Kassapa, you should not ask me such a question as that—&#039;In these eighty years, friend Bākula, how many times have you engaged in the sexual act?&#039; You should ask me such a question as this: ‘In these eighty years, friend Bākula, how many times have perceptions of sensual desire arisen in you ( <i>kāmasaññā uppannapubbā</i> )?’”</div>
+                    </div>
+                    <div class="commentary-section">
+            
+                        <div class="commentary-pali commentary-pali-section" data-pali="209.Evaṃme sutanti bākulasuttaṃ. Tattha bākuloti yathā dvāvīsati dvattiṃsātiādimhi vattabbe bāvīsati bāttiṃsātiādīni vuccanti, evameva dvikuloti vattabbe bākuloti vuttaṃ. Tassa hi therassa dve kulāni ahesuṃ. So kira devaloko cavitvā kosambinagare nāma  mahāseṭṭhikule nibbatto, tamenaṃ pañcame divase sīsaṃ nhāpetvā gaṅgākīḷaṃ akaṃsu. Dhātiyā dārakaṃ udake nimujjanummujjanavasena kīḷāpentiyā eko maccho dārakaṃ disvā ‘‘bhakkho me aya’’nti maññamāno mukhaṃ vivaritvā upagato. Dhātī dārakaṃ  chaḍḍetvā palātā. Maccho taṃ gili. Puññavā satto dukkhaṃ na pāpuṇi, sayanagabbhaṃ pavisitvā nipanno viya ahosi. Maccho dārakassa tejena tattakapallaṃ gilitvā dayhamāno viya vegena tiṃsayojanamaggaṃ gantvā bārāṇasinagaravāsino macchabandhassa jālaṃ pāvisi, mahāmacchā nāma jālabaddhā pahariyamānā maranti. Ayaṃ pana dārakassa tejena jālato nīhaṭamattova mato. Macchabandhā ca mahantaṃ macchaṃ labhitvā phāletvā vikkiṇanti. Taṃ pana dārakassa ānubhāvena aphāletvā sakalameva kājena haritvā sahassena demāti vadantā nagare vicariṃsu. Koci na gaṇhāti. Tasmiṃ pana nagare aputtakaṃ asītikoṭivibhavaṃ seṭṭhikulaṃ atthi, tassa dvāramūlaṃ patvā ‘‘kiṃ gahetvā dethā’’ti vuttā kahāpaṇanti āhaṃsu. Tehi kahāpaṇaṃ datvā gahito. Seṭṭhibhariyāpi aññesu divasesu macche na kelāyati, taṃ divasaṃ pana macchaṃ phalake ṭhapetvā sayameva phālesi. Macchañca nāma kucchito phālenti, sā pana piṭṭhito phālentī macchakucchiyaṃ suvaṇṇavaṇṇaṃ dārakaṃ disvā – ‘‘macchakucchiyaṃ me putto laddho’’ti nādaṃ naditvā dārakaṃ ādāya sāmikassa santikaṃ agamāsi. Seṭṭhi tāvadeva bheriṃ carāpetvā dārakaṃ ādāya rañño santikaṃ gantvā – ‘‘macchakucchiyaṃ me deva dārako laddho, kiṃ karomī’’ti āha. Puññavā esa, yo macchakucchiyaṃ arogo vasi, posehi nanti. Assosi  kho itaraṃ kulaṃ – ‘‘bārāṇasiyaṃ kira ekaṃ seṭṭhikulaṃ macchakucchiyaṃ dārakaṃ labhatī’’ti, te tattha agamaṃsu. Athassa mātā dārakaṃ alaṅkaritvā kīḷāpiyamānaṃ disvāva ‘‘manāpo vatāyaṃ  dārako’’ti gantvā pavatiṃ ācikkhi. Itarā mayhaṃ puttotiādimāha. Kahaṃ te laddhoti? Macchakucchiyanti. No tuyhaṃ putto, mayhaṃ puttoti. Kahaṃ te laddhoti? Mayā dasamāse kucchiyā dhārito, atha naṃ nadiyā kīḷāpiyamānaṃ  maccho gilīti. Tuyhaṃ putto aññena macchena gilito bhavissati, ayaṃ pana mayā macchakucchiyaṃ laddhoti, ubhopi rājakulaṃ agamaṃsu. Rājā āha – ‘‘ayaṃ dasa māse kucchiyā dhāritattā amātā kātuṃ na sakkā, macchaṃ gaṇhantāpi vakkayakanādīni bahi katvā gaṇhantā nāma natthīti macchakucchiyaṃ laddhattā ayampi amātā kātuṃ na sakkā, dārako ubhinnampi kulānaṃ dāyādo hotu, ubhopi naṃ jaggathā’’ti ubhopi jaggiṃsu.    Viññutaṃ pattassa dvīsupi nagaresu pāsādaṃ kāretvā nāṭakāni paccupaṭṭhāpesuṃ. Ekekasmiṃ nagare cattāro cattāro māse vasati, ekasmiṃ nagare cattāro māse vuṭṭhassa saṅghāṭanāvāya maṇḍapaṃ kāretvā tattha naṃ saddhiṃ nāṭakāhi āropenti. So sampattiṃ anubhavamāno itaraṃ nagaraṃ gacchati. Taṃnagaravāsino nāṭakāni upaḍḍhamaggaṃ agamaṃsu. Te paccuggantvā taṃ parivāretvā attano pāsādaṃ nayanti. Itarāni nāṭakāni nivattitvā attano nagarameva gacchanti. Tattha cattāro māse vasitvā teneva niyāmena puna itaraṃ nagaraṃ gacchati. Evamassa sampattiṃ anubhavantassa asīti vassāni paripuṇṇāni. Atha bhagavā cārikaṃ caramāno bārāṇasiṃ patto. So bhagavato santike dhammaṃ sutvā paṭiladdhasaddho pabbajito. Pabbajitvā sattāhameva puthujjano ahosi, aṭṭhame pana so  saha paṭisambhidāhi arahattaṃ pāpuṇīti evamassa dve kulāni ahesuṃ. Tasmā bākuloti saṅkhaṃ agamāsīti.  Purāṇagihisahāyoti pubbe gihikāle sahāyo. Ayampi dīghāyukova theraṃ pabbajitaṃ passituṃ gacchanto asītime vasse gato. Methuno dhammoti bālo naggasamaṇako bālapucchaṃ pucchati, na sāsanavacanaṃ, idāni therena dinnanaye ṭhito imehi pana teti pucchi. Purāṇagihisahāyo Methuno dhammo imehi pana te">209.Evaṃme sutanti bākulasuttaṃ. Tattha bākuloti yathā dvāvīsati dvattiṃsātiādimhi vattabbe bāvīsati bāttiṃsātiādīni vuccanti, evameva dvikuloti vattabbe bākuloti vuttaṃ. Tassa hi therassa dve kulāni ahesuṃ. So kira devaloko cavitvā kosambinagare nāma  mahāseṭṭhikule nibbatto, tamenaṃ pañcame divase sīsaṃ nhāpetvā gaṅgākīḷaṃ akaṃsu. Dhātiyā dārakaṃ udake nimujjanummujjanavasena kīḷāpentiyā eko maccho dārakaṃ disvā ‘‘bhakkho me aya’’nti maññamāno mukhaṃ vivaritvā upagato. Dhātī dārakaṃ  chaḍḍetvā palātā. Maccho taṃ gili. Puññavā satto dukkhaṃ na pāpuṇi, sayanagabbhaṃ pavisitvā nipanno viya ahosi. Maccho dārakassa tejena tattakapallaṃ gilitvā dayhamāno viya vegena tiṃsayojanamaggaṃ gantvā bārāṇasinagaravāsino macchabandhassa jālaṃ pāvisi, mahāmacchā nāma jālabaddhā pahariyamānā maranti. Ayaṃ pana dārakassa tejena jālato nīhaṭamattova mato. Macchabandhā ca mahantaṃ macchaṃ labhitvā phāletvā vikkiṇanti. Taṃ pana dārakassa ānubhāvena aphāletvā sakalameva kājena haritvā sahassena demāti vadantā nagare vicariṃsu. Koci na gaṇhāti. Tasmiṃ pana nagare aputtakaṃ asītikoṭivibhavaṃ seṭṭhikulaṃ atthi, tassa dvāramūlaṃ patvā ‘‘kiṃ gahetvā dethā’’ti vuttā kahāpaṇanti āhaṃsu. Tehi kahāpaṇaṃ datvā gahito. Seṭṭhibhariyāpi aññesu divasesu macche na kelāyati, taṃ divasaṃ pana macchaṃ phalake ṭhapetvā sayameva phālesi. Macchañca nāma kucchito phālenti, sā pana piṭṭhito phālentī macchakucchiyaṃ suvaṇṇavaṇṇaṃ dārakaṃ disvā – ‘‘macchakucchiyaṃ me putto laddho’’ti nādaṃ naditvā dārakaṃ ādāya sāmikassa santikaṃ agamāsi. Seṭṭhi tāvadeva bheriṃ carāpetvā dārakaṃ ādāya rañño santikaṃ gantvā – ‘‘macchakucchiyaṃ me deva dārako laddho, kiṃ karomī’’ti āha. Puññavā esa, yo macchakucchiyaṃ arogo vasi, posehi nanti. Assosi  kho itaraṃ kulaṃ – ‘‘bārāṇasiyaṃ kira ekaṃ seṭṭhikulaṃ macchakucchiyaṃ dārakaṃ labhatī’’ti, te tattha agamaṃsu. Athassa mātā dārakaṃ alaṅkaritvā kīḷāpiyamānaṃ disvāva ‘‘manāpo vatāyaṃ  dārako’’ti gantvā pavatiṃ ācikkhi. Itarā mayhaṃ puttotiādimāha. Kahaṃ te laddhoti? Macchakucchiyanti. No tuyhaṃ putto, mayhaṃ puttoti. Kahaṃ te laddhoti? Mayā dasamāse kucchiyā dhārito, atha naṃ nadiyā kīḷāpiyamānaṃ  maccho gilīti. Tuyhaṃ putto aññena macchena gilito bhavissati, ayaṃ pana mayā macchakucchiyaṃ laddhoti, ubhopi rājakulaṃ agamaṃsu. Rājā āha – ‘‘ayaṃ dasa māse kucchiyā dhāritattā amātā kātuṃ na sakkā, macchaṃ gaṇhantāpi vakkayakanādīni bahi katvā gaṇhantā nāma natthīti macchakucchiyaṃ laddhattā ayampi amātā kātuṃ na sakkā, dārako ubhinnampi kulānaṃ dāyādo hotu, ubhopi naṃ jaggathā’’ti ubhopi jaggiṃsu.    Viññutaṃ pattassa dvīsupi nagaresu pāsādaṃ kāretvā nāṭakāni paccupaṭṭhāpesuṃ. Ekekasmiṃ nagare cattāro cattāro māse vasati, ekasmiṃ nagare cattāro māse vuṭṭhassa saṅghāṭanāvāya maṇḍapaṃ kāretvā tattha naṃ saddhiṃ nāṭakāhi āropenti. So sampattiṃ anubhavamāno itaraṃ nagaraṃ gacchati. Taṃnagaravāsino nāṭakāni upaḍḍhamaggaṃ agamaṃsu. Te paccuggantvā taṃ parivāretvā attano pāsādaṃ nayanti. Itarāni nāṭakāni nivattitvā attano nagarameva gacchanti. Tattha cattāro māse vasitvā teneva niyāmena puna itaraṃ nagaraṃ gacchati. Evamassa sampattiṃ anubhavantassa asīti vassāni paripuṇṇāni. Atha bhagavā cārikaṃ caramāno bārāṇasiṃ patto. So bhagavato santike dhammaṃ sutvā paṭiladdhasaddho pabbajito. Pabbajitvā sattāhameva puthujjano ahosi, aṭṭhame pana so  saha paṭisambhidāhi arahattaṃ pāpuṇīti evamassa dve kulāni ahesuṃ. Tasmā bākuloti saṅkhaṃ agamāsīti.  Purāṇagihisahāyoti pubbe gihikāle sahāyo. Ayampi dīghāyukova theraṃ pabbajitaṃ passituṃ gacchanto asītime vasse gato. Methuno dhammoti bālo naggasamaṇako bālapucchaṃ pucchati, na sāsanavacanaṃ, idāni therena dinnanaye ṭhito imehi pana teti pucchi. Purāṇagihisahāyo Methuno dhammo imehi pana te</div>
+                        <div class="commentary-english commentary-english-section">Thus have I heard. This is the Bākula Sūtra.<br><br>There, &quot;Bākula&quot; is like saying <i>bāvīsati</i> and <i>bāttiṃsa</i> instead of <i>dvāvīsati</i> and <i>dvattiṃsa</i>, so <i>bākula</i> is said instead of <i>dvikula</i>.<br><br>Indeed, that elder had two families.<br><br>It is said that he, having passed away from the Deva world, was born in Kosambī in a great merchant family. On the fifth day, they bathed his head and performed the <i>gaṅgākīḷaṃ</i> ceremony.<br><br>While a wet nurse was playing with the boy in the water by submerging him and bringing him up, a fish saw the boy and, thinking, &quot;This is my food,&quot; approached with its mouth open.<br><br>The wet nurse, abandoning the boy, fled.<br><br>The fish swallowed him.<br><br>The virtuous being did not suffer. It was as if he had entered his sleeping chamber and lay down.<br><br>The fish, having swallowed the hot pot shard due to the boy&#039;s power and feeling burned, went swiftly for a distance of thirty <i>yojanas</i> and entered the net of a fisherman living in the city of Vārāṇasī. Large fish die when caught in a net and beaten.<br><br>But this one, due to the boy&#039;s power, died as soon as he was taken out of the net.<br><br>The fishermen, having obtained a large fish, split it open and were selling it.<br><br>But due to the boy&#039;s power, without splitting it open, taking it whole, and saying, &quot;We will give it for a thousand,&quot; they went around in the city.<br><br>No one bought it.<br><br>In that city, there was a merchant family without a son, possessing eighty <i>koṭis</i> of wealth. Reaching the base of their door, when asked, &quot;What will you take and give it for?&quot; they said, &quot;A <i>kahāpaṇa</i>.&quot;<br><br>They took it, having given a <i>kahāpaṇa</i>.<br><br>The merchant&#039;s wife did not usually clean fish on other days, but on that day, placing the fish on a plank, she herself split it open.<br><br>And usually they split the fish from the belly, but she, splitting it from the back, saw a boy with a golden color in the fish&#039;s belly and, exclaiming, &quot;I have found a son in the fish&#039;s belly!&quot; and making a noise, taking the boy, she went to her husband.<br><br>The merchant, immediately having a drum paraded, taking the boy, went to the king and said, &quot;I have found a boy in the fish&#039;s belly, your majesty. What should I do?&quot;<br><br>&quot;He is virtuous, who lived without disease in the fish&#039;s belly. Nourish him!&quot; they said.<br><br>Another family heard, &quot;In Vārāṇasī, a merchant family has found a boy in a fish&#039;s belly,&quot; and they went there.<br><br>Then his mother, having adorned the boy and seeing him being played with, exclaiming, &quot;This boy is pleasing!&quot; went and told her husband.<br><br>The other one said, &quot;He is my son,&quot; and so on.<br><br>&quot;Where did you get him?&quot; &quot;In the fish&#039;s belly.&quot;<br><br>&quot;He is not your son, he is my son.&quot;<br><br>&quot;Where did you get him?&quot; &quot;I carried him in my belly for ten months, then a fish swallowed him while he was being played with in the river.&quot;<br><br>&quot;Your son must have been swallowed by another fish. But this one was found by me in the fish&#039;s belly,&quot; they both went to the royal court.<br><br>The king said, &quot;Since this one was carried in the belly for ten months, she cannot be made not a mother. Also, there is no one who, when taking a fish, takes it after removing the entrails and so on, so since he was found in the fish&#039;s belly, this one also cannot be made not a mother. Let the boy be an heir to both families. Both of you should care for him.&quot; Both of them cared for him.<br><br>Having built a palace in both cities for the well-known one, they had plays performed.<br><br>He lived four months in each city. Having lived four months in one city, having a pavilion built for the departure ceremony, they raised him there together with actors.<br><br>Enjoying prosperity, he went to the other city.<br>The townspeople went halfway to meet the actors.<br>They went to meet him, surrounded him, and led him to their palace.<br>The other actors, having turned back, went to their own city.<br>Having lived there for four months, according to that same rule, he again goes to another city.<br>Thus, while he was experiencing prosperity, eighty years were completed.<br><br>Then the Blessed One, wandering on tour, arrived at Vārāṇasī.<br>Having heard the <i>dharma</i> near the Blessed One, having regained faith, he went forth.<br>Having gone forth, he was a common person for only seven days; on the eighth day, he attained <i>arhatship</i> together with the discriminations. Thus, he had two families.<br>Therefore, he was called Bākulo.<br><br>&quot;Former householder friend&quot; means a friend in the past, during his householder life.<br>Even this long-lived one, while going to see the elder who had gone forth, went in his eightieth year.<br>&quot;<i>Maithuno dhammo</i>&quot; means a fool, a naked ascetic, asks a foolish question, not the word of the teaching; now, standing in the way given by the elder, he asks, &quot;But by these?&quot;.<br><br>Former householder friend, <i>maithuno dhammo</i>, but by these?</div>
+                
+                    </div>
+                </div>
+            
+                <div class="paragraph">
+                    <div class="paragraph-number">210</div>
+                    <div class="mula-section">
+                        <div class="pali-text mula-pali-section" data-pali="210. ‘‘Asīti me, āvuso , vassāni pabbajitassa nābhijānāmi kāmasaññaṃ uppannapubbaṃ. Yaṃpāyasmā bākulo asītiyā vassehi nābhijānāti kāmasaññaṃ uppannapubbaṃ idampi mayaṃ āyasmato bākulassa acchariyaṃ abbhutadhammaṃ dhārema. ‘‘Asīti me, āvuso, vassāni pabbajitassa nābhijānāmi byāpādasaññaṃ…pe… vihiṃsāsaññaṃ uppannapubbaṃ. Yaṃpāyasmā bākulo asītiyā vassehi nābhijānāti vihiṃsāsaññaṃ uppannapubbaṃ, idampi mayaṃ āyasmato bākulassa acchariyaṃ abbhutadhammaṃ dhārema. ‘‘Asīti me, āvuso, vassāni pabbajitassa nābhijānāmi kāmavitakkaṃ uppannapubbaṃ. Yaṃpāyasmā bākulo asītiyā vassehi nābhijānāti kāmavitakkaṃ uppannapubbaṃ, idampi mayaṃ āyasmato bākulassa acchariyaṃ abbhutadhammaṃ dhārema. ‘‘Asīti  me, āvuso, vassāni pabbajitassa nābhijānāmi byāpādavitakkaṃ…pe… vihiṃsāvitakkaṃ uppannapubbaṃ. Yaṃpāyasmā bākulo asītiyā vassehi  nābhijānāti vihiṃsāvitakkaṃ uppannapubbaṃ, idampi mayaṃ āyasmato bākulassa acchariyaṃ abbhutadhammaṃ dhārema.  ">210. ‘‘Asīti me, āvuso , vassāni pabbajitassa nābhijānāmi kāmasaññaṃ uppannapubbaṃ. Yaṃpāyasmā bākulo asītiyā vassehi nābhijānāti kāmasaññaṃ uppannapubbaṃ idampi mayaṃ āyasmato bākulassa acchariyaṃ abbhutadhammaṃ dhārema. ‘‘Asīti me, āvuso, vassāni pabbajitassa nābhijānāmi byāpādasaññaṃ…pe… vihiṃsāsaññaṃ uppannapubbaṃ. Yaṃpāyasmā bākulo asītiyā vassehi nābhijānāti vihiṃsāsaññaṃ uppannapubbaṃ, idampi mayaṃ āyasmato bākulassa acchariyaṃ abbhutadhammaṃ dhārema. ‘‘Asīti me, āvuso, vassāni pabbajitassa nābhijānāmi kāmavitakkaṃ uppannapubbaṃ. Yaṃpāyasmā bākulo asītiyā vassehi nābhijānāti kāmavitakkaṃ uppannapubbaṃ, idampi mayaṃ āyasmato bākulassa acchariyaṃ abbhutadhammaṃ dhārema. ‘‘Asīti  me, āvuso, vassāni pabbajitassa nābhijānāmi byāpādavitakkaṃ…pe… vihiṃsāvitakkaṃ uppannapubbaṃ. Yaṃpāyasmā bākulo asītiyā vassehi  nābhijānāti vihiṃsāvitakkaṃ uppannapubbaṃ, idampi mayaṃ āyasmato bākulassa acchariyaṃ abbhutadhammaṃ dhārema.  </div>
+                        <div class="translation-text mula-english-section">“Friend, in the eighty years since I went forth I do not recall any perception of sensual desire to have ever arisen in me. That in the eighty years since he went forth the venerable Bakkula did not recall any perception of sensual desire to have ever arisen in him - this we remember as a wonderful and marvellous quality of the venerable Bakkula.<br><br>“Friend, in the eighty years since I went forth I do not recall any perception of ill will…any perception of cruelty to have ever arisen in me. That in the eighty years since he went forth the venerable Bakkula did not recall any perception of ill will… any perception of cruelty to have ever arisen in him -this we remember as a wonderful and marvellous quality of the venerable Bakkula.<br><br>“Friend, in the eighty years since I went forth I do not recall any thought of sensual desire to have ever arisen in me. …this too we remember as a wonderful and marvellous quality of the venerable Bakkula.<br><br>“Friend, in the eighty years since I went forth I do not recall any thought of ill will…any thought of cruelty to have ever arisen in me. …this too we remember as a wonderful and marvellous quality of the venerable Bakkula.</div>
+                    </div>
+                    <div class="commentary-section">
+            
+                        <div class="commentary-pali commentary-pali-section" data-pali="210.Yaṃpāyasmātiādīni  padāni sabbavāresu dhammasaṅgāhakattherehi niyametvā ṭhapitāni. Tattha saññā uppannamattāva, vitakko kammapathabhedakoti . Thero panāha – ‘‘kasmā visuṃ karotha, ubhayampetaṃ kammapathabhedakamevā’’ti.">210.Yaṃpāyasmātiādīni  padāni sabbavāresu dhammasaṅgāhakattherehi niyametvā ṭhapitāni. Tattha saññā uppannamattāva, vitakko kammapathabhedakoti . Thero panāha – ‘‘kasmā visuṃ karotha, ubhayampetaṃ kammapathabhedakamevā’’ti.</div>
+                        <div class="commentary-english commentary-english-section">210. The words <i>yaṃpāyasmā</i> etc. on all occasions were established by the <i>dhammasaṅgāhakatthera</i>s, having regulated them. There, as soon as perception (<i>saññā</i>) arises, thought (<i>vitakka</i>) [occurs], dividing the path of action (<i>kammapatha</i>). The elder then said, &quot;Why do you separate [them]? Both are indeed dividers of the path of action (<i>kammapathabhedaka</i>).&quot;</div>
+                
+                    </div>
+                </div>
+            
+                <div class="paragraph">
+                    <div class="paragraph-number">211</div>
+                    <div class="mula-section">
+                        <div class="pali-text mula-pali-section" data-pali="211. ‘‘Asīti  me, āvuso, vassāni pabbajitassa nābhijānāmi gahapaticīvaraṃ sāditā. Yaṃpāyasmā bākulo asītiyā vassehi nābhijānāti gahapaticīvaraṃ sāditā, idampi mayaṃ āyasmato bākulassa acchariyaṃ abbhutadhammaṃ dhārema. ‘‘Asīti me, āvuso, vassāni pabbajitassa nābhijānāmi satthena cīvaraṃ chinditā. Yaṃpāyasmā bākulo asītiyā vassehi nābhijānāti satthena cīvaraṃ chinditā…pe… dhārema. ‘‘Asīti me, āvuso, vassāni pabbajitassa nābhijānāmi sūciyā cīvaraṃ sibbitā…pe… nābhijānāmi rajanena cīvaraṃ rajitā… nābhijānāmi kathine kaṭhine (sī. syā. kaṃ. pī.) cīvaraṃ sibbitā… nābhijānāmi sabrahmacārīnaṃ cīvarakamme vicāritā sabrahmacārī cīvarakamme byāpāritā (sī. pī.) … nābhijānāmi nimantanaṃ sāditā… nābhijānāmi evarūpaṃ cittaṃ uppannapubbaṃ  – ‘aho vata maṃ koci nimanteyyā’ti… nābhijānāmi antaraghare nisīditā… nābhijānāmi antaraghare bhuñjitā… nābhijānāmi mātugāmassa anubyañjanaso nimittaṃ gahetā… nābhijānāmi mātugāmassa dhammaṃ desitā antamaso catuppadampi gāthaṃ… nābhijānāmi bhikkhunupassayaṃ upasaṅkamitā… nābhijānāmi bhikkhuniyā dhammaṃ desitā… nābhijānāmi sikkhamānāya dhammaṃ desitā… nābhijānāmi sāmaṇeriyā dhammaṃ desitā… nābhijānāmi pabbājetā… nābhijānāmi upasampādetā… nābhijānāmi nissayaṃ dātā… nābhijānāmi sāmaṇeraṃ upaṭṭhāpetā… nābhijānāmi jantāghare nhāyitā… nābhijānāmi cuṇṇena nhāyitā… nābhijānāmi sabrahmacārīgattaparikamme  vicāritā byāpāritā (sī. pī.) … nābhijānāmi ābādhaṃ uppannapubbaṃ, antamaso gaddūhanamattampi… nābhijānāmi bhesajjaṃ upaharitā, antamaso haritakikhaṇḍampi… nābhijānāmi apassenakaṃ apassayitā… nābhijānāmi seyyaṃ kappetā. Yaṃpāyasmā…pe… dhārema. kaṭhine (sī. syā. kaṃ. pī.) sabrahmacārī cīvarakamme byāpāritā (sī. pī.)   byāpāritā (sī. pī.) ‘‘Asīti me, āvuso, vassāni pabbajitassa nābhijānāmi gāmantasenāsane vassaṃ upagantā . Yaṃpāyasmā bākulo asītiyā vassehi  nābhijānāti gāmantasenāsane vassaṃ upagantā, idampi mayaṃ āyasmato bākulassa acchariyaṃ abbhutadhammaṃ dhārema.   ‘‘Sattāhameva kho  ahaṃ, āvuso, saraṇo raṭṭhapiṇḍaṃ bhuñjiṃ; atha aṭṭhamiyaṃ aññā udapādi. Yaṃpāyasmā bākulo sattāhameva saraṇo raṭṭhapiṇḍaṃ bhuñji; atha aṭṭhamiyaṃ aññā udapādi idampi mayaṃ āyasmato bākulassa acchariyaṃ abbhutadhammaṃ dhārema. ">211. ‘‘Asīti  me, āvuso, vassāni pabbajitassa nābhijānāmi gahapaticīvaraṃ sāditā. Yaṃpāyasmā bākulo asītiyā vassehi nābhijānāti gahapaticīvaraṃ sāditā, idampi mayaṃ āyasmato bākulassa acchariyaṃ abbhutadhammaṃ dhārema. ‘‘Asīti me, āvuso, vassāni pabbajitassa nābhijānāmi satthena cīvaraṃ chinditā. Yaṃpāyasmā bākulo asītiyā vassehi nābhijānāti satthena cīvaraṃ chinditā…pe… dhārema. ‘‘Asīti me, āvuso, vassāni pabbajitassa nābhijānāmi sūciyā cīvaraṃ sibbitā…pe… nābhijānāmi rajanena cīvaraṃ rajitā… nābhijānāmi kathine kaṭhine (sī. syā. kaṃ. pī.) cīvaraṃ sibbitā… nābhijānāmi sabrahmacārīnaṃ cīvarakamme vicāritā sabrahmacārī cīvarakamme byāpāritā (sī. pī.) … nābhijānāmi nimantanaṃ sāditā… nābhijānāmi evarūpaṃ cittaṃ uppannapubbaṃ  – ‘aho vata maṃ koci nimanteyyā’ti… nābhijānāmi antaraghare nisīditā… nābhijānāmi antaraghare bhuñjitā… nābhijānāmi mātugāmassa anubyañjanaso nimittaṃ gahetā… nābhijānāmi mātugāmassa dhammaṃ desitā antamaso catuppadampi gāthaṃ… nābhijānāmi bhikkhunupassayaṃ upasaṅkamitā… nābhijānāmi bhikkhuniyā dhammaṃ desitā… nābhijānāmi sikkhamānāya dhammaṃ desitā… nābhijānāmi sāmaṇeriyā dhammaṃ desitā… nābhijānāmi pabbājetā… nābhijānāmi upasampādetā… nābhijānāmi nissayaṃ dātā… nābhijānāmi sāmaṇeraṃ upaṭṭhāpetā… nābhijānāmi jantāghare nhāyitā… nābhijānāmi cuṇṇena nhāyitā… nābhijānāmi sabrahmacārīgattaparikamme  vicāritā byāpāritā (sī. pī.) … nābhijānāmi ābādhaṃ uppannapubbaṃ, antamaso gaddūhanamattampi… nābhijānāmi bhesajjaṃ upaharitā, antamaso haritakikhaṇḍampi… nābhijānāmi apassenakaṃ apassayitā… nābhijānāmi seyyaṃ kappetā. Yaṃpāyasmā…pe… dhārema. kaṭhine (sī. syā. kaṃ. pī.) sabrahmacārī cīvarakamme byāpāritā (sī. pī.)   byāpāritā (sī. pī.) ‘‘Asīti me, āvuso, vassāni pabbajitassa nābhijānāmi gāmantasenāsane vassaṃ upagantā . Yaṃpāyasmā bākulo asītiyā vassehi  nābhijānāti gāmantasenāsane vassaṃ upagantā, idampi mayaṃ āyasmato bākulassa acchariyaṃ abbhutadhammaṃ dhārema.   ‘‘Sattāhameva kho  ahaṃ, āvuso, saraṇo raṭṭhapiṇḍaṃ bhuñjiṃ; atha aṭṭhamiyaṃ aññā udapādi. Yaṃpāyasmā bākulo sattāhameva saraṇo raṭṭhapiṇḍaṃ bhuñji; atha aṭṭhamiyaṃ aññā udapādi idampi mayaṃ āyasmato bākulassa acchariyaṃ abbhutadhammaṃ dhārema. </div>
+                        <div class="translation-text mula-english-section">211. “Friend, in the eighty years since I went forth I do not recall ever having accepted a robe from a householder. This too we remember as a wonderful and marvelous quality of the venerable Bākula.<br><br>“Friend, in the eighty years since I went forth I do not recall ever having cut a robe with a cutter. This too we remember...<br><br>“Friend, in the eighty years since I went forth I do not recall ever having sewn a robe with a needle... I do not recall ever having dyed a robe with dye... I do not recall ever having sewn a robe for the <i>kathina</i> (kaṭhine) [ceremony]... I do not recall ever having participated in robe-making for my fellow monks… I do not recall ever having accepted an invitation… I do not recall such a thought ever having arisen in me – ‘Oh, would that someone invite me!’… I do not recall ever having sat down inside a house… I do not recall ever having eaten inside a house… I do not recall ever having grasped at signs indicative of a woman’s features… I do not recall ever having taught the <i>dharma</i> to a woman, even so much as a four-line verse… I do not recall ever having approached a nun&#039;s residence… I do not recall ever having taught the <i>dharma</i> to a nun… I do not recall ever having taught the <i>dharma</i> to a female probationer (<i>śikṣamāṇā</i>)… I do not recall ever having taught the <i>dharma</i> to a female novice (<i>śrāmaṇerikā</i>)… I do not recall ever having given the going forth (<i>pravrajyā</i>)… I do not recall ever having conferred the higher ordination (<i>upasampadā</i>)… I do not recall ever having given support (<i>niśraya</i>)… I do not recall ever having attended upon a novice (<i>śrāmaṇera</i>)… I do not recall ever having bathed in a hot-air bathhouse (<i>jantāghara</i>)… I do not recall ever having bathed with bath powder (<i>cūrṇa</i>)… I do not recall ever having participated in body massage for my fellow monks… I do not recall any illness ever having arisen, not even so much as a milking of a cow (<i>gaddūhanamattampi</i>)… I do not recall ever having accepted medicine, not even so much as a piece of <i>harītakī</i> fruit… I do not recall ever having lain down without a support (<i>apassenaka</i>)… I do not recall ever having prepared a bed (<i>śayyā</i>) . This too we remember...<br><br>“Friend, in the eighty years since I went forth I do not recall ever having spent the rainy season (<i>varṣā</i>) in a village boundary monastery (<i>grāmantasenāsana</i>). This too we remember as a wonderful and marvelous quality of the venerable Bākula.<br><br>“Friend, for seven days after going forth I ate the country’s almsfood as a debtor; on the eighth day final knowledge (<i>aññā</i>) arose. This too we remember as a wonderful and marvelous quality of the venerable Bākula.</div>
+                    </div>
+                    <div class="commentary-section">
+            
+                        <div class="commentary-pali commentary-pali-section" data-pali="211.Gahapaticīvaranti vassāvāsikaṃ cīvaraṃ. Satthenāti pipphalakena. Sūciyāti sūciṃ gahetvā sibbitabhāvaṃ na sarāmīti attho. Kathine cīvaranti kathinacīvaraṃ, kathinacīvarampi hi vassāvāsikagatikameva. Tasmā tattha ‘‘sibbitā nābhijānāmī’’ti āha. Ettakaṃ panassa kālaṃ gahapaticīvaraṃ asādiyantassa chindanasibbanādīni akarontassa kuto cīvaraṃ uppajjatīti. Dvīhi nagarehi. Thero hi mahāyasassī, tassa puttadhītaro nattapanattakā sukhumasāṭakehi cīvarāni kāretvā rajāpetvā samugge pakkhipitvā pahiṇanti. Therassa nhānakāle nhānakoṭṭhake ṭhapenti. Thero tāni nivāseti ceva pārupati ca, purāṇacīvarāni  sampattapabbajitānaṃ deti. Thero tāni nivāsetvā ca pārupitvā ca navakammaṃ na karoti, kiñci āyūhanakammaṃ natthi. Phalasamāpattiṃ appetvā appetvā nisīdati. Catūsu māsesu pattesu lomakiliṭṭhāni honti, athassa puna teneva niyāmena pahiṇitvā denti. Aḍḍhamāse aḍḍhamāse parivattatītipi vadantiyeva.  Anacchariyañcetaṃ therassa mahāpuññassa mahābhiññassa satasahassakappe pūritapāramissa, asokadhammarañño kulūpako nigrodhatthero divasassa nikkhattuṃ cīvaraṃ parivattesi. Tassa hi ticīvaraṃ hatthikkhandhe ṭhapetvā pañcahi ca gandhasamuggasatehi pañcahi ca mālāsamuggasatehi saddhiṃ pātova āhariyittha, tathā divā ceva sāyañca. Rājā kira divasassa nikkhattuṃ sāṭake parivattento ‘‘therassa cīvaraṃ nīta’’nti pucchitvā ‘‘āma nīta’’nti sutvāva parivattesi. Theropi na bhaṇḍikaṃ bandhitvā ṭhapesi, sampattasabrahmacārīnaṃ adāsi. Tadā kira jambudīpe bhikkhusaṅghassa yebhuyyena nigrodhasseva santakaṃ cīvaraṃ ahosi. Aho vata maṃ koci nimanteyyāti kiṃ pana cittassa anuppādanaṃ bhāriyaṃ, uppannassa pahānanti. Cittaṃ nāma lahukaparivattaṃ, tasmā anuppādanaṃ bhāriyaṃ , uppannassa pahānampi bhāriyameva . Antaraghareti mahāsakuludāyisutte (ma. ni. 2.237) indakhīlato paṭṭhāya  antaragharaṃ nāma idha nimbodakapatanaṭṭhānaṃ adhippetaṃ. Kuto panassa bhikkhā uppajjitthāti. Thero dvīsu nagaresu abhiññāto, gehadvāraṃ āgatassevassa pattaṃ gahetvā nānārasabhojanassa pūretvā denti. So laddhaṭṭhānato nivattati, bhattakiccakaraṇaṭṭhānaṃ panassa nibaddhameva ahosi. Anubyañjanasoti therena kira rūpe nimittaṃ gahetvā mātugāmo na olokitapubbo. Mātugāmassa dhammanti mātugāmassa chappañcavācāhi dhammaṃ desetuṃ vaṭṭati, pañhaṃ puṭṭhena gāthāsahassampi vattuṃ vaṭṭatiyeva. Thero pana kappiyameva na akāsi. Yebhuyyena hi kulūpakatherānametaṃ kammaṃ hoti. Bhikkhunupassayanti bhikkhuniupassayaṃ. Taṃ pana gilānapucchakena gantuṃ vaṭṭati, thero pana kappiyameva na akāsi. Esa nayo sabbattha. Cuṇṇenāti kosambacuṇṇādinā. Gattaparikammeti sarīrasambāhanakamme. Vicāritāti payojayitā. Gaddūhanamattanti gāviṃ thane gahetvā ekaṃ khīrabinduṃ dūhanakālamattampi. Aho vata maṃ koci nimanteyyā   Antaraghare  Anubyañjanaso Mātugāmassa dhamma Bhikkhunupassaya Cuṇṇenā Gattaparikamme Vicāritā Gaddūhanamatta Kena pana kāraṇena thero nirābādho ahosi. Padumuttare kira bhagavati satasahassabhikkhuparivāre  cārikaṃ caramāne himavati visarukkhā pupphiṃsu. Bhikkhusatasahassānampi tiṇapupphakarogo uppajjati. Thero tasmiṃ samaye iddhimā tāpaso hoti, so ākāsena gacchanto bhikkhusaṅghaṃ disvā otaritvā rogaṃ pucchitvā himavantato osadhaṃ āharitvā adāsi. Upasiṅghanamatteneva rogo vūpasami. Kassapasammāsambuddhakālepi paṭhamavappadivase vappaṃ ṭhapetvā bhikkhusaṅghassa paribhogaṃ aggisālañceva vaccakuṭiñca kāretvā bhikkhusaṅghassa bhesajjavattaṃ nibandhi, iminā kammena nirābādho ahosi. Ukkaṭṭhanesajjiko panesa ukkaṭṭhāraññako ca tasmā ‘‘nābhijānāmi apassenakaṃ apassayitā’’tiādimāha.  Saraṇoti sakileso. Aññā udapādīti anupasampannassa aññaṃ byākātuṃ na vaṭṭati. Thero kasmā byākāsi? Na thero ahaṃ arahāti āha, aññā udapādīti panāha. Apica thero arahāti pākaṭo, tasmā evamāha. Saraṇo Aññā udapādī">211.Gahapaticīvaranti vassāvāsikaṃ cīvaraṃ. Satthenāti pipphalakena. Sūciyāti sūciṃ gahetvā sibbitabhāvaṃ na sarāmīti attho. Kathine cīvaranti kathinacīvaraṃ, kathinacīvarampi hi vassāvāsikagatikameva. Tasmā tattha ‘‘sibbitā nābhijānāmī’’ti āha. Ettakaṃ panassa kālaṃ gahapaticīvaraṃ asādiyantassa chindanasibbanādīni akarontassa kuto cīvaraṃ uppajjatīti. Dvīhi nagarehi. Thero hi mahāyasassī, tassa puttadhītaro nattapanattakā sukhumasāṭakehi cīvarāni kāretvā rajāpetvā samugge pakkhipitvā pahiṇanti. Therassa nhānakāle nhānakoṭṭhake ṭhapenti. Thero tāni nivāseti ceva pārupati ca, purāṇacīvarāni  sampattapabbajitānaṃ deti. Thero tāni nivāsetvā ca pārupitvā ca navakammaṃ na karoti, kiñci āyūhanakammaṃ natthi. Phalasamāpattiṃ appetvā appetvā nisīdati. Catūsu māsesu pattesu lomakiliṭṭhāni honti, athassa puna teneva niyāmena pahiṇitvā denti. Aḍḍhamāse aḍḍhamāse parivattatītipi vadantiyeva.  Anacchariyañcetaṃ therassa mahāpuññassa mahābhiññassa satasahassakappe pūritapāramissa, asokadhammarañño kulūpako nigrodhatthero divasassa nikkhattuṃ cīvaraṃ parivattesi. Tassa hi ticīvaraṃ hatthikkhandhe ṭhapetvā pañcahi ca gandhasamuggasatehi pañcahi ca mālāsamuggasatehi saddhiṃ pātova āhariyittha, tathā divā ceva sāyañca. Rājā kira divasassa nikkhattuṃ sāṭake parivattento ‘‘therassa cīvaraṃ nīta’’nti pucchitvā ‘‘āma nīta’’nti sutvāva parivattesi. Theropi na bhaṇḍikaṃ bandhitvā ṭhapesi, sampattasabrahmacārīnaṃ adāsi. Tadā kira jambudīpe bhikkhusaṅghassa yebhuyyena nigrodhasseva santakaṃ cīvaraṃ ahosi. Aho vata maṃ koci nimanteyyāti kiṃ pana cittassa anuppādanaṃ bhāriyaṃ, uppannassa pahānanti. Cittaṃ nāma lahukaparivattaṃ, tasmā anuppādanaṃ bhāriyaṃ , uppannassa pahānampi bhāriyameva . Antaraghareti mahāsakuludāyisutte (ma. ni. 2.237) indakhīlato paṭṭhāya  antaragharaṃ nāma idha nimbodakapatanaṭṭhānaṃ adhippetaṃ. Kuto panassa bhikkhā uppajjitthāti. Thero dvīsu nagaresu abhiññāto, gehadvāraṃ āgatassevassa pattaṃ gahetvā nānārasabhojanassa pūretvā denti. So laddhaṭṭhānato nivattati, bhattakiccakaraṇaṭṭhānaṃ panassa nibaddhameva ahosi. Anubyañjanasoti therena kira rūpe nimittaṃ gahetvā mātugāmo na olokitapubbo. Mātugāmassa dhammanti mātugāmassa chappañcavācāhi dhammaṃ desetuṃ vaṭṭati, pañhaṃ puṭṭhena gāthāsahassampi vattuṃ vaṭṭatiyeva. Thero pana kappiyameva na akāsi. Yebhuyyena hi kulūpakatherānametaṃ kammaṃ hoti. Bhikkhunupassayanti bhikkhuniupassayaṃ. Taṃ pana gilānapucchakena gantuṃ vaṭṭati, thero pana kappiyameva na akāsi. Esa nayo sabbattha. Cuṇṇenāti kosambacuṇṇādinā. Gattaparikammeti sarīrasambāhanakamme. Vicāritāti payojayitā. Gaddūhanamattanti gāviṃ thane gahetvā ekaṃ khīrabinduṃ dūhanakālamattampi. Aho vata maṃ koci nimanteyyā   Antaraghare  Anubyañjanaso Mātugāmassa dhamma Bhikkhunupassaya Cuṇṇenā Gattaparikamme Vicāritā Gaddūhanamatta Kena pana kāraṇena thero nirābādho ahosi. Padumuttare kira bhagavati satasahassabhikkhuparivāre  cārikaṃ caramāne himavati visarukkhā pupphiṃsu. Bhikkhusatasahassānampi tiṇapupphakarogo uppajjati. Thero tasmiṃ samaye iddhimā tāpaso hoti, so ākāsena gacchanto bhikkhusaṅghaṃ disvā otaritvā rogaṃ pucchitvā himavantato osadhaṃ āharitvā adāsi. Upasiṅghanamatteneva rogo vūpasami. Kassapasammāsambuddhakālepi paṭhamavappadivase vappaṃ ṭhapetvā bhikkhusaṅghassa paribhogaṃ aggisālañceva vaccakuṭiñca kāretvā bhikkhusaṅghassa bhesajjavattaṃ nibandhi, iminā kammena nirābādho ahosi. Ukkaṭṭhanesajjiko panesa ukkaṭṭhāraññako ca tasmā ‘‘nābhijānāmi apassenakaṃ apassayitā’’tiādimāha.  Saraṇoti sakileso. Aññā udapādīti anupasampannassa aññaṃ byākātuṃ na vaṭṭati. Thero kasmā byākāsi? Na thero ahaṃ arahāti āha, aññā udapādīti panāha. Apica thero arahāti pākaṭo, tasmā evamāha. Saraṇo Aññā udapādī</div>
+                        <div class="commentary-english commentary-english-section">211.<br>Gahapaticīvara means a robe for the rainy season retreat (<i>vassāvāsikaṃ cīvaraṃ</i>).<br>Satthena means with <i>pipphalaka</i>.<br>Sūciyā means taking a needle (<i>sūcim</i>) and not remembering the act of sewing (<i>sibbitabhāvaṃ na sarāmīti</i>), that is the meaning.<br>Kathine cīvara means a <i>kathina</i> robe (<i>kathinacīvaraṃ</i>); indeed, a <i>kathina</i> robe is also a matter of the rainy season retreat (<i>vassāvāsikagatikameva</i>).<br>Therefore, there he said, &quot;I do not know how to sew (<i>sibbitā nābhijānāmīti</i>).&quot;<br> How could a robe arise for him, since he did not receive a householder&#039;s robe (<i>gahapaticīvaraṃ asādiyantassa</i>), and he did not do things like cutting and sewing (<i>chindanasibbanādīni akarontassa</i>) for such a long time?<br>With two cities.<br>Indeed, the Elder was very famous (<i>mahāyasassī</i>); his sons and daughters, grandsons and great-grandsons, having fine linen cloths (<i>sukhumasāṭakehi cīvarāni</i>) made into robes (<i>kāretvā</i>), dyed (<i>rajāpetvā</i>), put into boxes (<i>samugge pakkhipitvā</i>), sent them (<i>pahiṇanti</i>).<br>At the time of the Elder’s bathing (<i>nhānakāle</i>), they place [water] in the bathing chamber (<i>nhānakoṭṭhake ṭhapenti</i>).<br>The Elder would wear those (<i>tāni nivāseti</i>) and put them on (<i>pārupati</i>), and he would give the old robes (<i>purāṇacīvarāni</i>) to those who had attained the homeless state (<i>sampattapabbajitānaṃ deti</i>).<br>The Elder, having worn those (<i>tāni nivāsetvā</i>) and having put them on (<i>pārupitvā</i>), would not do new work (<i>navakammaṃ na karoti</i>); there was no repairing work at all (<i>kiñci āyūhanakammaṃ natthi</i>).<br>Having relinquished the fruition attainment (<i>phalasamāpattiṃ appetvā appetvā</i>), he sits down (<i>nisīdati</i>).<br>When four months had passed (<i>catūsu māsesu pattesu</i>), they become soiled with dirt (<i>lomakiliṭṭhāni honti</i>), then they would send them back to him (<i>athassa puna teneva niyāmena pahiṇitvā denti</i>).<br>They even say that they would exchange [robes] every half-month (<i>aḍḍhamāse aḍḍhamāse parivattatītipi vadantiyeva</i>).<br>  It was not astonishing (<i>anacchariyañcetaṃ</i>) that Nigrodha, the Elder (<i>nigrodhatthero</i>), the servant of King Aśokadhamma (<i>asokadhammarañño kulūpako</i>), the Elder (<i>therassa</i>) of great merit (<i>mahāpuññassa</i>), of great knowledge (<i>mahābhiññassa</i>), who had perfected the perfections over hundreds of thousands of eons (<i>satasahassakappe pūritapāramissa</i>), would exchange his robe once a day (<i>divasassa nikkhattuṃ cīvaraṃ parivattesi</i>).<br>Indeed, having placed his triple robe (<i>ticīvaraṃ</i>) on the elephant’s shoulder (<i>hatthikkhandhe ṭhapetvā</i>), along with five hundred boxes of perfume (<i>pañcahi ca gandhasamuggasatehi</i>) and five hundred boxes of garlands (<i>pañcahi ca mālāsamuggasatehi saddhiṃ</i>), it would be brought early in the morning (<i>pātova āhariyittha</i>), and likewise during the day and in the evening (<i>tathā divā ceva sāyañca</i>).<br>The king, it is said (<i>rājā kira</i>), exchanging linen cloths once a day (<i>divasassa nikkhattuṃ sāṭake parivattento</i>), having asked, &quot;Has the Elder’s robe been brought? (<i>therassa cīvaraṃ nīta’’nti pucchitvā</i>),&quot; and having heard, &quot;Yes, it has been brought (<i>‘‘āma nīta’’nti sutvāva</i>),&quot; he would exchange [his robe] (<i>parivattesi</i>).<br>Even the Elder (<i>theropi</i>) would not tie up the bundle and put it away (<i>na bhaṇḍikaṃ bandhitvā ṭhapesi</i>), he would give [it] to his fellow brahmacharis who had attained [the homeless state] (<i>sampattasabrahmacārīnaṃ adāsi</i>).<br>At that time (<i>tadā kira</i>), it is said, in Jambudvipa (<i>jambudīpe</i>) the robes belonging to Nigrodha (<i>nigrodhasseva santakaṃ cīvaraṃ</i>) were generally for the <i>bhikkhusangha</i> (<i>bhikkhusaṅghassa yebhuyyena ahosi</i>).<br> &quot;Oh, that someone would invite me!&quot; (aho vata maṃ koci nimanteyyā)ti, what then is more burdensome, not producing the mind (<i>cittassa anuppādanaṃ bhāriyaṃ</i>) or abandoning what has arisen (<i>uppannassa pahānanti</i>)?<br>The mind (<i>cittaṃ nāma</i>) is of light change (<i>lahukaparivattaṃ</i>), therefore, not producing it is more burdensome (<i>tasmā anuppādanaṃ bhāriyaṃ</i>), and abandoning what has arisen is also more burdensome (<i>uppannassa pahānampi bhāriyameva</i>).<br>&quot;In the inner chamber&quot; (antaraghare)ti, in the Mahāsakuludāyi Sutta (<i>mahāsakuludāyisutte</i>) (M.<br>N.<br>2.<br>237), starting from the <i>indakhīla</i> (<i>indakhīlato paṭṭhāya</i>), &quot;inner chamber&quot; (<i>antaragharaṃ nāma</i>) here means the place where the nimba water falls (<i>idha nimbodakapatanaṭṭhānaṃ adhippetaṃ</i>).<br>From where did alms arise for him (<i>kuto panassa bhikkhā uppajjitthāti</i>)?<br>The Elder was known in two cities (<i>thero dvīsu nagaresu abhiññāto</i>); people would take his bowl (<i>pattaṃ gahetvā</i>) as soon as he arrived at the house door (<i>gehadvāraṃ āgatassevassa</i>), fill it with various delicious foods (<i>nānārasabhojanassa pūretvā</i>), and give it to him (<i>denti</i>).<br>He would return from that place where he had received [alms] (<i>so laddhaṭṭhānato nivattati</i>), but his place for doing the meal duties was fixed (<i>bhattakiccakaraṇaṭṭhānaṃ panassa nibaddhameva ahosi</i>).<br>&quot;With the secondary characteristics&quot; (anubyañjanaso)ti, it is said that the Elder (<i>therena kira</i>) never looked at a woman (<i>mātugāmo na olokitapubbo</i>) by taking the form as a sign (<i>rūpe nimittaṃ gahetvā</i>).<br>&quot;The <i>dhamma</i> of a woman&quot; (mātugāmassa dhamma)nti, it is proper to teach the <i>dhamma</i> to a woman with five or six words (<i>mātugāmassa chappañcavācāhi dhammaṃ desetuṃ vaṭṭati</i>), if asked a question, it is proper to say even a thousand verses (<i>pañhaṃ puṭṭhena gāthāsahassampi vattuṃ vaṭṭatiyeva</i>).<br>But the Elder did not do what was proper (<i>thero pana kappiyameva na akāsi</i>).<br>Indeed, this was generally the duty of the lineage elders (<i>yebhuyyena hi kulūpakatherānametaṃ kammaṃ hoti</i>).<br>&quot;<i>Bhikkhunupassaya</i>&quot; means a nun’s residence (<i>bhikkhuniupassayaṃ</i>).<br>It is proper for one asking after the sick to go there (<i>taṃ pana gilānapucchakena gantuṃ vaṭṭati</i>), but the Elder did not do what was proper (<i>thero pana kappiyameva na akāsi</i>).<br>cuṇṇenāti: with powder, that is, with kosamba powder, etc.<br>gattaparikammti: bodily massage work.<br>vicāritāti: having arranged.<br>gaddūhanamattanti: the time it takes to milk a single drop of milk from a cow after grasping the udder.<br>aho vata maṃ koci nimanteyyā: Oh, that someone would invite me!<br>antaraghare: inside the house.<br>anubyañjanaso mātugāmassa dhamma bhikkhunupassaya cuṇṇenā gattaparikamme vicāritā gaddūhanamatta<br>saraṇoti sakileso: Saraṇo means with defilements.<br>aññā udapādīti: For one who is not fully ordained, it is not proper to declare realization.<br>saraṇo aññā udapādī</div>
+                
+                    </div>
+                </div>
+            
+                <div class="paragraph">
+                    <div class="paragraph-number">212</div>
+                    <div class="mula-section">
+                        <div class="pali-text mula-pali-section" data-pali="212. ‘‘Labheyyāhaṃ, āvuso bākula, imasmiṃ dhammavinaye pabbajjaṃ, labheyyaṃ upasampada’’nti. Alattha kho acelakassapo imasmiṃ dhammavinaye pabbajjaṃ, alattha upasampadaṃ. Acirūpasampanno panāyasmā kassapo eko vūpakaṭṭho appamatto ātāpī pahitatto viharanto nacirasseva – yassatthāya kulaputtā sammadeva agārasmā anagāriyaṃ pabbajanti tadanuttaraṃ – brahmacariyapariyosānaṃ diṭṭheva dhamme sayaṃ abhiññā sacchikatvā upasampajja vihāsi. ‘Khīṇā jāti, vusitaṃ brahmacariyaṃ, kataṃ karaṇīyaṃ, nāparaṃ itthattāyā’ti abbhaññāsi. Aññataro kho panāyasmā kassapo arahataṃ ahosi. Atha kho āyasmā bākulo aparena samayena avāpuraṇaṃ apāpuraṇaṃ (sī. syā. kaṃ. pī.) ādāya vihārena vihāraṃ upasaṅkamitvā evamāha – ‘‘abhikkamathāyasmanto, abhikkamathāyasmanto. Ajja me parinibbānaṃ bhavissatī’’ti. ‘‘Yaṃpāyasmā bākulo avāpuraṇaṃ ādāya vihārena vihāraṃ upasaṅkamitvā evamāha – ‘abhikkamathāyasmanto, abhikkamathāyasmanto; ajja me parinibbānaṃ bhavissatī’ti, idampi mayaṃ āyasmato bākulassa acchariyaṃ abbhutadhammaṃ dhārema’’. apāpuraṇaṃ (sī. syā. kaṃ. pī.) Āyasmā  bākulo majjhe bhikkhusaṅghassa nisinnakova parinibbāyi. ‘‘Yaṃpāyasmā bākulo majjhe bhikkhusaṅghassa nisinnakova parinibbāyi, idampi mayaṃ āyasmato bākulassa acchariyaṃ abbhutadhammaṃ dhāremā’’ti.   Bākulasuttaṃ niṭṭhitaṃ catutthaṃ.">212. ‘‘Labheyyāhaṃ, āvuso bākula, imasmiṃ dhammavinaye pabbajjaṃ, labheyyaṃ upasampada’’nti. Alattha kho acelakassapo imasmiṃ dhammavinaye pabbajjaṃ, alattha upasampadaṃ. Acirūpasampanno panāyasmā kassapo eko vūpakaṭṭho appamatto ātāpī pahitatto viharanto nacirasseva – yassatthāya kulaputtā sammadeva agārasmā anagāriyaṃ pabbajanti tadanuttaraṃ – brahmacariyapariyosānaṃ diṭṭheva dhamme sayaṃ abhiññā sacchikatvā upasampajja vihāsi. ‘Khīṇā jāti, vusitaṃ brahmacariyaṃ, kataṃ karaṇīyaṃ, nāparaṃ itthattāyā’ti abbhaññāsi. Aññataro kho panāyasmā kassapo arahataṃ ahosi. Atha kho āyasmā bākulo aparena samayena avāpuraṇaṃ apāpuraṇaṃ (sī. syā. kaṃ. pī.) ādāya vihārena vihāraṃ upasaṅkamitvā evamāha – ‘‘abhikkamathāyasmanto, abhikkamathāyasmanto. Ajja me parinibbānaṃ bhavissatī’’ti. ‘‘Yaṃpāyasmā bākulo avāpuraṇaṃ ādāya vihārena vihāraṃ upasaṅkamitvā evamāha – ‘abhikkamathāyasmanto, abhikkamathāyasmanto; ajja me parinibbānaṃ bhavissatī’ti, idampi mayaṃ āyasmato bākulassa acchariyaṃ abbhutadhammaṃ dhārema’’. apāpuraṇaṃ (sī. syā. kaṃ. pī.) Āyasmā  bākulo majjhe bhikkhusaṅghassa nisinnakova parinibbāyi. ‘‘Yaṃpāyasmā bākulo majjhe bhikkhusaṅghassa nisinnakova parinibbāyi, idampi mayaṃ āyasmato bākulassa acchariyaṃ abbhutadhammaṃ dhāremā’’ti.   Bākulasuttaṃ niṭṭhitaṃ catutthaṃ.</div>
+                        <div class="translation-text mula-english-section">212. Then Acela Kassapa said: “I would receive the going forth in this Dhamma and Discipline, I would receive the full admission.”<br><br>And Acela Kassapa received the going forth in this Dhamma and Discipline, he received the full admission.<br><br>And soon, not long after his full admission, dwelling alone, withdrawn, diligent, ardent, and resolute, the venerable Kassapa, by realizing for himself with direct knowledge, here and now entered upon and abided in that supreme goal of the holy life for the sake of which clansmen rightly go forth from the home life into homelessness.<br><br>He directly knew: “Birth is destroyed, the holy life has been lived, what had to be done has been done, there is no more coming to any state of being.”<br><br>And the venerable Kassapa became one of the <i>arahants</i>.<br><br>Then, on a later occasion, the venerable Bakkula took a key and went from cell to cell, saying: “Come forth, venerable sirs; come forth, venerable sirs. Today I shall attain final <i>Nibbana</i>.”<br><br>“That the venerable Bakkula took a key and went from cell to cell saying: “Come forth, venerable sirs; come forth, venerable sirs. Today I shall attain final <i>Nibbana</i>” - this too we remember as a wonderful and marvelous quality of the venerable Bakkula.”<br><br>The venerable Bakkula, seated in the midst of the <i>Sangha</i> of <i>bhikkhus</i>, attained final <i>Nibbana</i>.<br><br>“That seated in the midst of the Sangha of <i>bhikkhus</i>, the venerable Bakkula attained final <i>Nibbana</i> - this too we remember as a wonderful and marvelous quality of the venerable Bakkula.”<br><br>The Bakula <i>Sutta</i>, the fourth, is finished.</div>
+                    </div>
+                    <div class="commentary-section">
+            
+                        <div class="commentary-pali commentary-pali-section" data-pali="212.Pabbajjanti  thero sayaṃ neva pabbājesi, na upasampādesi aññehi pana bhikkhūhi evaṃ kārāpesi. Avāpuraṇaṃ ādāyāti kuñcikaṃ gahetvā. Nisinnakovaparinibbāyīti ahaṃ dharamānopi na aññassa bhikkhussa bhāro ahosiṃ, parinibbutassāpi me sarīraṃ bhikkhusaṅghassa palibodho mā ahosīti tejodhātuṃ samāpajjitvā parinibbāyi. Sarīrato jālā uṭṭhahi, chavimaṃsalohitaṃ sappi viya jhāyamānaṃ parikkhayaṃ gataṃ, sumanamakulasadisā  dhātuyova avasesiṃsu. Sesaṃ sabbattha pākaṭameva. Idaṃ pana suttaṃ dutiyasaṅgahe saṅgītanti. Nisinnakova  parinibbāyī  Papañcasūdaniyā majjhimanikāyaṭṭhakathāya Bākulasuttavaṇṇanā niṭṭhitā.">212.Pabbajjanti  thero sayaṃ neva pabbājesi, na upasampādesi aññehi pana bhikkhūhi evaṃ kārāpesi. Avāpuraṇaṃ ādāyāti kuñcikaṃ gahetvā. Nisinnakovaparinibbāyīti ahaṃ dharamānopi na aññassa bhikkhussa bhāro ahosiṃ, parinibbutassāpi me sarīraṃ bhikkhusaṅghassa palibodho mā ahosīti tejodhātuṃ samāpajjitvā parinibbāyi. Sarīrato jālā uṭṭhahi, chavimaṃsalohitaṃ sappi viya jhāyamānaṃ parikkhayaṃ gataṃ, sumanamakulasadisā  dhātuyova avasesiṃsu. Sesaṃ sabbattha pākaṭameva. Idaṃ pana suttaṃ dutiyasaṅgahe saṅgītanti. Nisinnakova  parinibbāyī  Papañcasūdaniyā majjhimanikāyaṭṭhakathāya Bākulasuttavaṇṇanā niṭṭhitā.</div>
+                        <div class="commentary-english commentary-english-section">212. <i>Pabbajjā</i> means the elder (thero) himself neither gave the going forth (<i>pabbājesi</i>) nor conferred the higher ordination (<i>upasampādesi</i>), but he had other monks cause it to be done thus. <i>Avāpuraṇaṃ ādāya</i> means having taken the key (<i>kuñcikaṃ gahetvā</i>).<br><br><i>Nisinnakova parinibbāyī</i> means &quot;Even while living, I was not a burden to another monk. Even after my passing, may my body not be an encumbrance to the Community of monks.&quot; Having attained the fire element (<i>tejodhātuṃ samāpajjitvā</i>), he passed away (<i>parinibbāyi</i>). Flames arose from his body. Skin, flesh, and blood, burning like ghee, went to destruction. Only relics (<i>dhātuyova</i>) resembling jasmine buds remained. The rest is but clear everywhere. This sutta was recited in the Second Council (<i>dutiyasaṅgahe saṅgītanti</i>).<br><br><i>Nisinnakova parinibbāyī</i><br><br>The Bakulasuttavaṇṇanā is finished.</div>
+                
+                    </div>
+                </div>
+            
+            </div>
+    
+            <div class="navigation">
+                <a href="../nikayas/mn/index.html" class="nav-btn home-btn">&larr; Back to Majjhima Nikāya</a>
+            </div>
+        </div>
+    
+        <script>
+            let currentView = {
+            };
+            
+            function loadAllSettings() {
+    // Load view settings like dark mode
+    const savedViews = localStorage.getItem('paliReaderSettings');
+    currentView = savedViews ? JSON.parse(savedViews) : {
+        mula_pali: true,
+        mula_english: true,
+        commentary_pali: false,
+        commentary_english: false,
+        devanagari: true
+    };
+    updateDisplay();
+    }
+            
+            // Save settings when changed
+            function saveSettings() {
+                localStorage.setItem('paliReaderSettings', JSON.stringify(currentView));
+            }
+    
+            function toggleView(type) {
+                currentView[type] = !currentView[type];
+                
+                const buttons = document.querySelectorAll('.btn.toggle');
+                buttons.forEach(btn => {
+                    let btnText = btn.textContent.toLowerCase();
+                    if ((type === 'mula_english' && btnText.includes('translation')) ||
+                        btnText.includes(type.replace('_', ' '))) {
+                        btn.classList.toggle('active', currentView[type]);
+                    }
+                });
+                  saveSettings();
+                  updateDisplay();
+            }
+    
+            function toggleScript() {
+                currentView.devanagari = !currentView.devanagari;
+                const btn = event.target;
+                btn.classList.toggle('active', currentView.devanagari);
+                document.body.classList.toggle('devanagari-script', currentView.devanagari);
+                updateDisplay();
+            }
+    
+            function toggleTheme() {
+                document.body.classList.toggle('dark-mode');
+                localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+            }
+    
+            function convertToDevanagari(text) {
+                if (!text) return text;
+                
+                text = text.toLowerCase();
+                
+                const consonants = {
+                    'k': 'क', 'kh': 'ख', 'g': 'ग', 'gh': 'घ', 'ṅ': 'ङ',
+                    'c': 'च', 'ch': 'छ', 'j': 'ज', 'jh': 'झ', 'ñ': 'ञ',
+                    'ṭ': 'ट', 'ṭh': 'ठ', 'ḍ': 'ड', 'ḍh': 'ढ', 'ṇ': 'ण',
+                    't': 'त', 'th': 'थ', 'd': 'द', 'dh': 'ध', 'n': 'न',
+                    'p': 'प', 'ph': 'फ', 'b': 'ब', 'bh': 'भ', 'm': 'म',
+                    'y': 'य', 'r': 'र', 'l': 'ल', 'v': 'व', 
+                    'ś': 'श', 'ṣ': 'ष', 's': 'स', 'h': 'ह'
+                };
+                
+                const vowelSigns = {
+                    'a': '', 'ā': 'ा', 'i': 'ि', 'ī': 'ी', 'u': 'ु', 'ū': 'ू',
+                    'e': 'े', 'o': 'ो'
+                };
+                
+                const independentVowels = {
+                    'a': 'अ', 'ā': 'आ', 'i': 'इ', 'ī': 'ई', 'u': 'उ', 'ū': 'ऊ',
+                    'e': 'ए', 'o': 'ओ'
+                };
+                
+                let result = '';
+                let i = 0;
+                
+                while (i < text.length) {
+                    const char = text[i];
+                    
+                    // Handle special characters
+                    if (char === 'ṃ' || char === 'ṁ') {
+                        result += 'ं';
+                        i++;
+                        continue;
+                    }
+                    if (char === 'ḥ') {
+                        result += 'ः';
+                        i++;
+                        continue;
+                    }
+                    if (' ,.?!–-""\'\'‘’"".'.includes(char)) {
+                        result += char;
+                        i++;
+                        continue;
+                    }
+                    
+                    // Check for consonants
+                    let consonantFound = null;
+                    let consonantLength = 0;
+                    
+                    // Try 2-character consonants first
+                    if (i + 1 < text.length) {
+                        const twoChar = char + text[i + 1];
+                        if (consonants[twoChar]) {
+                            consonantFound = consonants[twoChar];
+                            consonantLength = 2;
+                        }
+                    }
+                    
+                    // Try single character consonants
+                    if (!consonantFound && consonants[char]) {
+                        consonantFound = consonants[char];
+                        consonantLength = 1;
+                    }
+                    
+                    if (consonantFound) {
+                        const nextIndex = i + consonantLength;
+                        
+                        // Check what comes after the consonant
+                        if (nextIndex < text.length) {
+                            const nextChar = text[nextIndex];
+                            
+                            // If followed by a vowel sign, use it
+                            if (vowelSigns[nextChar] !== undefined) {
+                                result += consonantFound + vowelSigns[nextChar];
+                                i += consonantLength + 1;
+                            } 
+                            // If followed by another consonant or punctuation, no inherent 'a'
+                            else if (consonants[nextChar] || ' ,.?!–-'.includes(nextChar)) {
+                                result += consonantFound + '्';
+                                i += consonantLength;
+                            }
+                            // Otherwise, assume inherent 'a'
+                            else {
+                                result += consonantFound;
+                                i += consonantLength;
+                            }
+                        } else {
+                            result += consonantFound;
+                            i += consonantLength;
+                        }
+                        continue;
+                    }
+                    
+                    // Check for independent vowels
+                    if (independentVowels[char]) {
+                        result += independentVowels[char];
+                        i++;
+                        continue;
+                    }
+                    
+                    result += char;
+                    i++;
+                }
+                
+                return result;
+            }
+    
+            function convertToDevanagariPreservingHTML(text) {
+                const parts = text.split(/(<[^>]*>)/);
+                let result = '';
+                for (let part of parts) {
+                    if (part.startsWith('<') && part.endsWith('>')) {
+                        result += part;
+                    } else {
+                        result += convertToDevanagari(part);
+                    }
+                }
+                return result;
+            }
+    
+  function updateDisplay() {
+    // Update view toggles
+    document.querySelectorAll('.mula-pali-section').forEach(section => {
+        section.style.display = currentView.mula_pali ? 'block' : 'none';
+    });
+    document.querySelectorAll('.mula-english-section').forEach(section => {
+        section.style.display = currentView.mula_english ? 'block' : 'none';
+    });
+    document.querySelectorAll('.commentary-pali-section').forEach(section => {
+        section.style.display = currentView.commentary_pali ? 'block' : 'none';
+    });
+    document.querySelectorAll('.commentary-english-section').forEach(section => {
+        section.style.display = currentView.commentary_english ? 'block' : 'none';
+    });
+
+    // DEBUG: Check what's happening
+    console.log('Commentary visibility:', currentView.commentary_pali, currentView.commentary_english);
+    
+    // FIX: Check if ANY commentary is visible (regardless of content)
+    document.querySelectorAll('.paragraph').forEach(paragraph => {
+        const isCommentaryVisible = currentView.commentary_pali || currentView.commentary_english;
+        console.log('Setting with-commentary:', isCommentaryVisible);
+        paragraph.classList.toggle('with-commentary', isCommentaryVisible);
+    });
+
+    // Update button states
+    const paliBtn = document.querySelector('.btn.toggle[onclick="toggleView(\'mula_pali\')"]');
+    const transBtn = document.querySelector('.btn.toggle[onclick="toggleView(\'mula_english\')"]');
+    const commPaliBtn = document.querySelector('.btn.toggle[onclick="toggleView(\'commentary_pali\')"]');
+    const commEngBtn = document.querySelector('.btn.toggle[onclick="toggleView(\'commentary_english\')"]');
+    
+    if (paliBtn) paliBtn.classList.toggle('active', currentView.mula_pali);
+    if (transBtn) transBtn.classList.toggle('active', currentView.mula_english);
+    if (commPaliBtn) commPaliBtn.classList.toggle('active', currentView.commentary_pali);
+    if (commEngBtn) commEngBtn.classList.toggle('active', currentView.commentary_english);
+
+    // Handle Devanagari conversion
+    document.querySelectorAll('.pali-text').forEach(element => {
+        const originalText = element.getAttribute('data-pali');
+        if (currentView.devanagari) {
+            element.innerHTML = convertToDevanagariPreservingHTML(originalText);
+        } else {
+            element.innerHTML = originalText;
+        }
+    });
+    document.querySelectorAll('.commentary-pali').forEach(element => {
+        const originalText = element.getAttribute('data-pali');
+        if (currentView.devanagari) {
+            element.innerHTML = convertToDevanagariPreservingHTML(originalText);
+        } else {
+            element.innerHTML = originalText;
+        }
+    });
+}
+    
+            // Keyboard shortcuts
+            document.addEventListener('keydown', function(event) {
+                if (event.ctrlKey) {
+                    if (event.key === 'ArrowRight') {
+                        const paragraphs = document.querySelectorAll('.paragraph');
+                        const current = document.elementFromPoint(window.innerWidth/2, window.innerHeight/2);
+                        let currentIndex = Array.from(paragraphs).findIndex(p => p.contains(current));
+                        if (currentIndex < paragraphs.length - 1) {
+                            paragraphs[currentIndex + 1].scrollIntoView({ behavior: 'smooth' });
+                        }
+                        event.preventDefault();
+                    } else if (event.key === 'ArrowLeft') {
+                        const paragraphs = document.querySelectorAll('.paragraph');
+                        const current = document.elementFromPoint(window.innerWidth/2, window.innerHeight/2);
+                        let currentIndex = Array.from(paragraphs).findIndex(p => p.contains(current));
+                        if (currentIndex > 0) {
+                            paragraphs[currentIndex - 1].scrollIntoView({ behavior: 'smooth' });
+                        }
+                        event.preventDefault();
+                    }
+                }
+            });
+    
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.body.classList.add('dark-mode');
+            }
+            
+            document.addEventListener('DOMContentLoaded', loadAllSettings);
+
+            
+            document.body.classList.toggle('devanagari-script', currentView.devanagari);
+            updateDisplay();
+        </script>
+    </body>
+    </html>
+    

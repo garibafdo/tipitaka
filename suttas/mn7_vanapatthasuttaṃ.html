@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Vanapatthasuttaṃ - Majjhima Nikāya</title>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Gentium+Plus:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+            @media (min-width: 1200px) {
+            .container {
+                max-width: 95%;  /* Use 95% of screen width on large screens */
+            }
+        }
+    
+            :root {
+                --primary-color: #2c3e50;
+                --secondary-color: #3498db;
+                --accent-color: #e74c3c;
+                --success-color: #27ae60;
+                --bg-color: #f8f9fa;
+                --card-bg: #ffffff;
+                --text-color: #2c3e50;
+                --border-radius: 8px;
+                --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            }
+    
+            .dark-mode {
+                --bg-color: #1a1a1a;
+                --card-bg: #2d2d2d;
+                --text-color: #f0f0f0;
+                --shadow: 0 4px 6px rgba(0,0,0,0.3);
+            }
+    
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+    
+            body {
+                font-family: 'Times New Roman', serif;
+                background: var(--bg-color);
+                color: var(--text-color);
+                line-height: 1.8;
+                transition: all 0.3s ease;
+            }
+    
+            .container {
+    max-width: 1400px;  /* Increased from 1000px */
+    margin: 0 auto;
+    padding: 1px;
+}
+    
+            .sutta-header {
+                background: var(--card-bg);
+                padding: 30px;
+                border-radius: var(--border-radius);
+                box-shadow: var(--shadow);
+                margin-bottom: 30px;
+                text-align: center;
+            }
+    
+            .sutta-title {
+                font-size: 2em;
+                color: var(--primary-color);
+                margin-bottom: 10px;
+                font-weight: bold;
+            }
+    
+            .dark-mode .sutta-title {
+                color: #f0f0f0;
+            }
+    
+            .sutta-subtitle {
+                color: #7f8c8d;
+                font-size: 1.1em;
+            }
+    
+            .dark-mode .sutta-subtitle {
+                color: #95a5a6;
+            }
+    
+            .navigation {
+                display: flex;
+                justify-content: space-between;
+                margin: 30px 0;
+                padding: 20px;
+                background: var(--card-bg);
+                border-radius: var(--border-radius);
+                box-shadow: var(--shadow);
+            }
+    
+            .nav-btn {
+                padding: 10px 20px;
+                background: var(--secondary-color);
+                color: white;
+                text-decoration: none;
+                border-radius: 4px;
+                transition: all 0.3s ease;
+                font-weight: bold;
+            }
+    
+            .nav-btn:hover {
+                opacity: 0.9;
+                transform: translateY(-1px);
+            }
+    
+            .nav-btn.disabled {
+                background: #bdc3c7;
+                cursor: not-allowed;
+            }
+    
+            .dark-mode .nav-btn.disabled {
+                background: #555;
+            }
+    
+            .home-btn {
+                background: var(--accent-color);
+            }
+    
+            .paragraph {
+    position: relative;
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: 20px 20px 20px 50px;
+    margin-bottom: 15px;
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+    border-left: 3px solid var(--primary-color);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;  /* Increased gap for better separation */
+}
+
+
+/* Only add border when commentary is visible */
+
+.paragraph {
+    position: relative;
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: 20px 20px 20px 50px;
+    margin-bottom: 15px;
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+    border-left: 3px solid var(--primary-color);
+    display: block; /* Default: single column as block layout */
+    gap: 20px;
+}
+
+.paragraph.with-commentary {
+    display: grid; /* Only use grid when commentary is visible */
+    grid-template-columns: 1fr 1fr;
+}
+
+.mula-section {
+    padding-right: 0; /* No border by default */
+}
+
+.paragraph.with-commentary .mula-section {
+    border-right: 1px solid #ecf0f1;
+    padding-right: 30px;
+}
+commentary-section {
+    background: #f5f5f5;
+    padding: 20px;  /* Increased padding */
+    border-radius: 6px;
+    border-left: 3px solid #7f8c8d;
+}
+            .dark-mode .commentary-section {
+                background: #3a3a3a;
+                border-left-color: #95a5a6;
+            }
+    
+            .paragraph-number {
+                position: absolute;
+                left: 15px;
+                top: 25px;
+                color: #666;
+                font-size: 0.9em;
+                font-weight: normal;
+            }
+    
+            .dark-mode .paragraph-number {
+                color: #aaa;
+            }
+    
+            .pali-text {
+                font-size: 1.3em;
+                margin-bottom: 20px;
+                color: #2c3e50;
+                font-weight: bold;
+                line-height: 1.8;
+                font-family: 'Times New Roman', 'Gentium Plus', serif;
+            }
+    
+            .devanagari-script .pali-text {
+                font-family: sans-serif;
+            }
+    
+            .dark-mode .pali-text {
+                color: #f0f0f0;
+            }
+    
+            .translation-text {
+                font-size: 1.25em;
+                margin-bottom: 20px;
+                color: #222;
+                line-height: 1.2;
+                font-family: 'Gentium Plus','Heuristica', 'Georgia', serif;
+                font-weight: normal;
+            }
+    
+            .dark-mode .translation-text {
+                color: #e8e8e8;
+            }
+    
+            .commentary-pali {
+                font-size: 1.2em;
+                margin-bottom: 15px;
+                color: #2c3e50;
+                font-style: italic;
+                line-height: 1.8;
+                font-family: 'Times New Roman', 'Gentium Plus', serif;
+            }
+    
+            .devanagari-script .commentary-pali {
+                font-family: sans-serif;
+            }
+    
+            .dark-mode .commentary-pali {
+                color: #f0f0f0;
+            }
+    
+            .commentary-english {
+                font-size: 1.1em;
+                color: #333;
+                line-height: 1.6;
+                font-family: 'Gentium Plus', 'Heuristica', 'Georgia', serif;
+                font-weight: normal;
+            }
+    
+            .dark-mode .commentary-english {
+                color: #e0e0e0;
+            }
+    
+            .controls {
+                display: flex;
+                gap: 10px;
+                justify-content: center;
+                margin: 20px 0;
+                flex-wrap: wrap;
+            }
+    
+            .btn {
+                padding: 8px 16px;
+                border: none;
+                border-radius: 4px;
+                background: #95a5a6;
+                color: white;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                font-weight: bold;
+            }
+    
+            .btn:hover {
+                opacity: 0.9;
+                transform: translateY(-1px);
+            }
+    
+            .btn.active {
+                background: var(--success-color);
+            }
+    
+            .btn.toggle {
+                position: relative;
+            }
+    
+            .btn.toggle::after {
+                content: "❌";
+                margin-left: 8px;
+                font-size: 0.9em;
+            }
+    
+            .btn.toggle.active::after {
+                content: "✅";
+            }
+    
+            @media (max-width: 768px) {
+                .container {
+                    padding: 10px;
+                }
+                .sutta-header {
+                    padding: 20px;
+                }
+                .sutta-title {
+                    font-size: 1.5em;
+                }
+                .navigation {
+                    flex-direction: column;
+                    gap: 10px;
+                    text-align: center;
+                }
+                .paragraph {
+                    padding: 20px 20px 20px 45px;
+                    grid-template-columns: 1fr;
+                }
+                .mula-section {
+                    border-right: none;
+                    padding-right: 0;
+                    border-bottom: 1px solid #ecf0f1;
+                    padding-bottom: 20px;
+                }
+                .paragraph-number {
+                    left: 12px;
+                    top: 20px;
+                }
+                .controls {
+                    gap: 5px;
+                }
+                .btn {
+                    padding: 6px 12px;
+                    font-size: 0.9em;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="sutta-header">
+                <h1 class="sutta-title">Vanapatthasuttaṃ</h1>
+                <div class="sutta-subtitle">Majjhima Nikāya 7</div>
+            </div>
+    
+            <div class="navigation">
+                <a href="../nikayas/mn/index.html" class="nav-btn home-btn">&larr; Back to Majjhima Nikāya</a>
+            </div>
+    
+            <div class="controls">
+                <button class="btn toggle active" onclick="toggleView('mula_pali')">Pali Text</button>
+                <button class="btn toggle active" onclick="toggleView('mula_english')">Translation</button>
+                <button class="btn toggle" onclick="toggleView('commentary_pali')">Commentary Pali</button>
+                <button class="btn toggle" onclick="toggleView('commentary_english')">Commentary English</button>
+                <button class="btn toggle active" onclick="toggleScript()">Devanagari Script</button>
+                <button class="btn" onclick="toggleTheme()">Dark/Light</button>
+            </div>
+    
+            <div id="content">
+    
+                <div class="paragraph">
+                    <div class="paragraph-number">190</div>
+                    <div class="mula-section">
+                        <div class="pali-text mula-pali-section" data-pali="190. Evaṃ  me sutaṃ – ekaṃ samayaṃ bhagavā sāvatthiyaṃ viharati jetavane anāthapiṇḍikassa ārāme. Tatra kho bhagavā bhikkhū āmantesi – ‘‘bhikkhavo’’ti. ‘‘Bhadante’’ti te bhikkhū bhagavato paccassosuṃ. Bhagavā etadavoca – ‘‘vanapatthapariyāyaṃ vo, bhikkhave, desessāmi, taṃ suṇātha, sādhukaṃ manasikarotha, bhāsissāmī’’ti. ‘‘Evaṃ, bhante’’ti kho te bhikkhū bhagavato paccassosuṃ. Bhagavā etadavoca –">190. Evaṃ  me sutaṃ – ekaṃ samayaṃ bhagavā sāvatthiyaṃ viharati jetavane anāthapiṇḍikassa ārāme. Tatra kho bhagavā bhikkhū āmantesi – ‘‘bhikkhavo’’ti. ‘‘Bhadante’’ti te bhikkhū bhagavato paccassosuṃ. Bhagavā etadavoca – ‘‘vanapatthapariyāyaṃ vo, bhikkhave, desessāmi, taṃ suṇātha, sādhukaṃ manasikarotha, bhāsissāmī’’ti. ‘‘Evaṃ, bhante’’ti kho te bhikkhū bhagavato paccassosuṃ. Bhagavā etadavoca –</div>
+                        <div class="translation-text mula-english-section">Thus have I heard. Once the Blessed One was staying at Sāvatthī in the Jeta Grove, Anāthapiṇḍika’s Park (jetavane anāthapiṇḍikassa ārāme).<br><br>There the Blessed One addressed the monks, saying: &quot;Monks (bhikkhavo)&quot;.<br><br>&quot;Venerable sir (bhadante),&quot; those monks replied to the Blessed One.<br><br>The Blessed One said this: “Monks, I will teach you the discourse on jungle thickets (vanapatthapariyāyaṃ). Listen to that, pay close attention, I will speak.”<br><br>&quot;As you say, lord (evaṃ, bhante),&quot; those monks responded to the Blessed One.<br><br>The Blessed One said:</div>
+                    </div>
+                    <div class="commentary-section">
+            
+                        <div class="commentary-pali commentary-pali-section" data-pali="190.Evaṃme sutanti vanapatthapariyāyaṃ. Tattha vanapatthapariyāyanti vanapatthakāraṇaṃ, vanapatthadesanaṃ vā.">190.Evaṃme sutanti vanapatthapariyāyaṃ. Tattha vanapatthapariyāyanti vanapatthakāraṇaṃ, vanapatthadesanaṃ vā.</div>
+                        <div class="commentary-english commentary-english-section">190. <i>evaṃ me suta</i> means the <i>vanapatthapariyāya</i>. There, <i>vanapatthapariyāya</i> means the reason for <i>vanapattha</i>, or the teaching on <i>vanapattha</i>.</div>
+                
+                    </div>
+                </div>
+            
+                <div class="paragraph">
+                    <div class="paragraph-number">191</div>
+                    <div class="mula-section">
+                        <div class="pali-text mula-pali-section" data-pali="191. ‘‘Idha, bhikkhave, bhikkhu aññataraṃ vanapatthaṃ upanissāya viharati. Tassa taṃ vanapatthaṃ upanissāya viharato anupaṭṭhitā ceva sati na upaṭṭhāti, asamāhitañca  cittaṃ na samādhiyati, aparikkhīṇā ca āsavā na parikkhayaṃ gacchanti, ananuppattañca anuttaraṃ yogakkhemaṃ nānupāpuṇāti. Ye ca kho ime pabbajitena jīvitaparikkhārā samudānetabbā – cīvarapiṇḍapātasenāsanagilānappaccayabhesajjaparikkhārā – te kasirena samudāgacchanti. Tena, bhikkhave, bhikkhunā iti paṭisañcikkhitabbaṃ  – ‘ahaṃ kho imaṃ vanapatthaṃ upanissāya viharāmi, tassa me imaṃ vanapatthaṃ upanissāya viharato anupaṭṭhitā ceva sati na upaṭṭhāti, asamāhitañca cittaṃ na samādhiyati, aparikkhīṇā ca āsavā na parikkhayaṃ gacchanti, ananuppattañca anuttaraṃ yogakkhemaṃ nānupāpuṇāmi. Ye ca kho ime pabbajitena jīvitaparikkhārā  samudānetabbā – cīvarapiṇḍapātasenāsanagilānappaccayabhesajjaparikkhārā – te kasirena samudāgacchantī’ti. Tena, bhikkhave, bhikkhunā rattibhāgaṃ vā divasabhāgaṃ vā tamhā vanapatthā pakkamitabbaṃ, na vatthabbaṃ.">191. ‘‘Idha, bhikkhave, bhikkhu aññataraṃ vanapatthaṃ upanissāya viharati. Tassa taṃ vanapatthaṃ upanissāya viharato anupaṭṭhitā ceva sati na upaṭṭhāti, asamāhitañca  cittaṃ na samādhiyati, aparikkhīṇā ca āsavā na parikkhayaṃ gacchanti, ananuppattañca anuttaraṃ yogakkhemaṃ nānupāpuṇāti. Ye ca kho ime pabbajitena jīvitaparikkhārā samudānetabbā – cīvarapiṇḍapātasenāsanagilānappaccayabhesajjaparikkhārā – te kasirena samudāgacchanti. Tena, bhikkhave, bhikkhunā iti paṭisañcikkhitabbaṃ  – ‘ahaṃ kho imaṃ vanapatthaṃ upanissāya viharāmi, tassa me imaṃ vanapatthaṃ upanissāya viharato anupaṭṭhitā ceva sati na upaṭṭhāti, asamāhitañca cittaṃ na samādhiyati, aparikkhīṇā ca āsavā na parikkhayaṃ gacchanti, ananuppattañca anuttaraṃ yogakkhemaṃ nānupāpuṇāmi. Ye ca kho ime pabbajitena jīvitaparikkhārā  samudānetabbā – cīvarapiṇḍapātasenāsanagilānappaccayabhesajjaparikkhārā – te kasirena samudāgacchantī’ti. Tena, bhikkhave, bhikkhunā rattibhāgaṃ vā divasabhāgaṃ vā tamhā vanapatthā pakkamitabbaṃ, na vatthabbaṃ.</div>
+                        <div class="translation-text mula-english-section">“Here, <i>bhikkhus</i>, a <i>bhikkhu</i> lives in dependence upon a certain jungle thicket (<i>vanapattha</i>).<br><br>While he is living there in dependence upon that jungle thicket (<i>vanapattha</i>), his unestablished mindfulness does not become established, his unconcentrated mind (<i>citta</i>) does not become concentrated, his undestroyed taints (<i>āsava</i>) do not come to destruction, he does not attain the unattained supreme security from bondage (<i>anuttaraṃ yogakkhemaṃ</i>).<br><br>And also the requisites of life (<i>jīvitaparikkhārā</i>) that should be obtained by one gone forth – robes (<i>cīvara</i>), almsfood (<i>piṇḍapāta</i>), resting place (<i>senāsana</i>), and medicinal requisites (<i>gilānappaccayabhesajjaparikkhārā</i>) – are hard to come by.<br><br>The <i>bhikkhu</i> should consider thus: ‘I am living in dependence upon this jungle thicket (<i>vanapattha</i>). While I am living here in dependence upon this jungle thicket (<i>vanapattha</i>) my unestablished mindfulness does not become established, my unconcentrated mind (<i>citta</i>) does not become concentrated, my undestroyed taints (<i>āsava</i>) do not come to destruction, I do not attain the unattained supreme security from bondage (<i>anuttaraṃ yogakkhemaṃ</i>).<br><br>And also the requisites of life (<i>jīvitaparikkhārā</i>) that should be obtained by one gone forth – robes (<i>cīvara</i>), almsfood (<i>piṇḍapāta</i>), resting place (<i>senāsana</i>), and medicinal requisites (<i>gilānappaccayabhesajjaparikkhārā</i>) – are hard to come by.’<br><br>That <i>bhikkhu</i> should depart from that jungle thicket (<i>vanapattha</i>) that very night or that very day; he should not continue living there.</div>
+                    </div>
+                    <div class="commentary-section">
+            
+                        <div class="commentary-pali commentary-pali-section" data-pali="191.Vanapatthaṃ upanissāya viharatīti manussūpacārātikkantaṃ vanasaṇḍasenāsanaṃ nissāya samaṇadhammaṃ karonto viharati. Anupaṭṭhitātiādīsu pubbe anupaṭṭhitā sati taṃ upanissāya viharatopi na upaṭṭhāti, pubbe asamāhitaṃ cittaṃ na samādhiyati, pubbe aparikkhīṇā āsavā na parikkhayaṃ gacchanti, pubbe ananuppattaṃ anuttaraṃ yogakkhemasaṅkhātaṃ arahattañca na pāpuṇātīti attho. Jīvitaparikkhārāti jīvitasambhārā. Samudānetabbāti samāharitabbā. Kasirena samudāgacchantīti dukkhena uppajjanti. Rattibhāgaṃ vā divasabhāgaṃ vāti rattikoṭṭhāse vā divasakoṭṭhāse vā. Ettha ca rattibhāge paṭisañcikkhamānena ñatvā rattiṃyeva pakkamitabbaṃ, rattiṃ caṇḍavāḷādīnaṃ paribandhe sati aruṇuggamanaṃ āgametabbaṃ. Divasabhāge ñatvā divāva pakkamitabbaṃ, divā paribandhe sati sūriyatthaṅgamanaṃ āgametabbaṃ.">191.Vanapatthaṃ upanissāya viharatīti manussūpacārātikkantaṃ vanasaṇḍasenāsanaṃ nissāya samaṇadhammaṃ karonto viharati. Anupaṭṭhitātiādīsu pubbe anupaṭṭhitā sati taṃ upanissāya viharatopi na upaṭṭhāti, pubbe asamāhitaṃ cittaṃ na samādhiyati, pubbe aparikkhīṇā āsavā na parikkhayaṃ gacchanti, pubbe ananuppattaṃ anuttaraṃ yogakkhemasaṅkhātaṃ arahattañca na pāpuṇātīti attho. Jīvitaparikkhārāti jīvitasambhārā. Samudānetabbāti samāharitabbā. Kasirena samudāgacchantīti dukkhena uppajjanti. Rattibhāgaṃ vā divasabhāgaṃ vāti rattikoṭṭhāse vā divasakoṭṭhāse vā. Ettha ca rattibhāge paṭisañcikkhamānena ñatvā rattiṃyeva pakkamitabbaṃ, rattiṃ caṇḍavāḷādīnaṃ paribandhe sati aruṇuggamanaṃ āgametabbaṃ. Divasabhāge ñatvā divāva pakkamitabbaṃ, divā paribandhe sati sūriyatthaṅgamanaṃ āgametabbaṃ.</div>
+                        <div class="commentary-english commentary-english-section">191. &quot;Living in dependence on a forest thicket (vanapatthaṃ upanissāya viharatī)&quot; means living while practicing the ascetic&#039;s life, relying on a forest-thicket dwelling-place that transcends human habitation.<br><br>In &quot;unestablished (anupaṭṭhitā)&quot; etc., even if mindfulness was previously unestablished and one lives relying on that, it is not established; the mind, previously uncollected, is not concentrated; the defilements (āsava), previously unextinguished, do not go to exhaustion; and one does not attain the unsurpassed Arahantship, described as security from bondage (yogakkhemasaṅkhātaṃ arahattañca), which was previously unattained—this is the meaning.<br><br>&quot;Requisites of life (jīvitaparikkhārā)&quot; means provisions for life (jīvitasambhārā).<br><br>&quot;Should be acquired (samudānetabbā)&quot; means should be collected (samāharitabbā).<br><br>&quot;Arise with difficulty (kasirena samudāgacchantī)&quot; means they arise with suffering (dukkhena uppajjanti).<br><br>&quot;Night portion or day portion (rattibhāgaṃ vā divasabhāgaṃ vā)&quot; means either in a portion of the night or in a portion of the day.<br><br>Here, one reflecting in the night portion, having known, should depart during the night itself; if there is a hindrance from fierce beasts, etc., during the night, the dawn should be awaited.<br><br>Having known in the day portion, one should depart during the day itself; if there is a hindrance during the day, the sunset should be awaited.</div>
+                
+                    </div>
+                </div>
+            
+                <div class="paragraph">
+                    <div class="paragraph-number">192</div>
+                    <div class="mula-section">
+                        <div class="pali-text mula-pali-section" data-pali="192. ‘‘Idha pana, bhikkhave, bhikkhu aññataraṃ vanapatthaṃ upanissāya viharati. Tassa taṃ vanapatthaṃ upanissāya viharato anupaṭṭhitā ceva sati na upaṭṭhāti, asamāhitañca cittaṃ na samādhiyati, aparikkhīṇā ca āsavā na parikkhayaṃ gacchanti, ananuppattañca anuttaraṃ yogakkhemaṃ nānupāpuṇāti. Ye ca kho ime pabbajitena jīvitaparikkhārā samudānetabbā – cīvarapiṇḍapātasenāsanagilānappaccayabhesajjaparikkhārā – te appakasirena samudāgacchanti. Tena , bhikkhave, bhikkhunā iti paṭisañcikkhitabbaṃ – ‘ahaṃ kho imaṃ vanapatthaṃ upanissāya viharāmi. Tassa me imaṃ vanapatthaṃ upanissāya viharato anupaṭṭhitā ceva sati na upaṭṭhāti asamāhitañca cittaṃ na samādhiyati, aparikkhīṇā ca āsavā na parikkhayaṃ gacchanti, ananuppattañca anuttaraṃ yogakkhemaṃ nānupāpuṇāmi. Ye ca kho ime pabbajitena jīvitaparikkhārā samudānetabbā – cīvarapiṇḍapātasenāsanagilānappaccayabhesajjaparikkhārā – te appakasirena samudāgacchanti. Na kho panāhaṃ cīvarahetu agārasmā anagāriyaṃ pabbajito na piṇḍapātahetu…pe… na senāsanahetu…pe… na gilānappaccayabhesajjaparikkhārahetu agārasmā anagāriyaṃ pabbajito. Atha ca pana me imaṃ  vanapatthaṃ upanissāya viharato anupaṭṭhitā ceva sati na upaṭṭhāti, asamāhitañca cittaṃ na samādhiyati, aparikkhīṇā ca āsavā na parikkhayaṃ gacchanti, ananuppattañca anuttaraṃ yogakkhemaṃ nānupāpuṇāmī’ti. Tena, bhikkhave, bhikkhunā saṅkhāpi tamhā vanapatthā pakkamitabbaṃ, na vatthabbaṃ.">192. ‘‘Idha pana, bhikkhave, bhikkhu aññataraṃ vanapatthaṃ upanissāya viharati. Tassa taṃ vanapatthaṃ upanissāya viharato anupaṭṭhitā ceva sati na upaṭṭhāti, asamāhitañca cittaṃ na samādhiyati, aparikkhīṇā ca āsavā na parikkhayaṃ gacchanti, ananuppattañca anuttaraṃ yogakkhemaṃ nānupāpuṇāti. Ye ca kho ime pabbajitena jīvitaparikkhārā samudānetabbā – cīvarapiṇḍapātasenāsanagilānappaccayabhesajjaparikkhārā – te appakasirena samudāgacchanti. Tena , bhikkhave, bhikkhunā iti paṭisañcikkhitabbaṃ – ‘ahaṃ kho imaṃ vanapatthaṃ upanissāya viharāmi. Tassa me imaṃ vanapatthaṃ upanissāya viharato anupaṭṭhitā ceva sati na upaṭṭhāti asamāhitañca cittaṃ na samādhiyati, aparikkhīṇā ca āsavā na parikkhayaṃ gacchanti, ananuppattañca anuttaraṃ yogakkhemaṃ nānupāpuṇāmi. Ye ca kho ime pabbajitena jīvitaparikkhārā samudānetabbā – cīvarapiṇḍapātasenāsanagilānappaccayabhesajjaparikkhārā – te appakasirena samudāgacchanti. Na kho panāhaṃ cīvarahetu agārasmā anagāriyaṃ pabbajito na piṇḍapātahetu…pe… na senāsanahetu…pe… na gilānappaccayabhesajjaparikkhārahetu agārasmā anagāriyaṃ pabbajito. Atha ca pana me imaṃ  vanapatthaṃ upanissāya viharato anupaṭṭhitā ceva sati na upaṭṭhāti, asamāhitañca cittaṃ na samādhiyati, aparikkhīṇā ca āsavā na parikkhayaṃ gacchanti, ananuppattañca anuttaraṃ yogakkhemaṃ nānupāpuṇāmī’ti. Tena, bhikkhave, bhikkhunā saṅkhāpi tamhā vanapatthā pakkamitabbaṃ, na vatthabbaṃ.</div>
+                        <div class="translation-text mula-english-section">192. “Here, <i>bhikkhus</i>, a <i>bhikkhu</i> lives in dependence upon a certain jungle thicket (<i>vanapatthaṃ upanissāya viharati</i>).<br><br>While he is living there in dependence upon that jungle thicket, his unestablished mindfulness does not become established, his unconcentrated mind does not become concentrated, his undestroyed taints (<i>āsavā</i>) do not come to destruction, he does not attain the unattained supreme security from bondage (<i>anuttaraṃ yogakkhemaṃ</i>);<br><br>and also the requisites of life (<i>jīvitaparikkhārā</i>) that should be obtained by one gone forth – robes (<i>cīvara</i>), almsfood (<i>piṇḍapāta</i>), resting place (<i>senāsana</i>), and medicinal requisites (<i>gilānappaccayabhesajja</i>)- are easy to come by.<br><br>Therefore, <i>bhikkhus</i>, the <i>bhikkhu</i> should consider thus: ‘I am living in dependence upon this jungle thicket.<br><br>While I am living here in dependence upon this jungle thicket, my unestablished mindfulness does not become established, my unconcentrated mind does not become concentrated, my undestroyed taints (<i>āsavā</i>) do not come to destruction, I do not attain the unattained supreme security from bondage (<i>anuttaraṃ yogakkhemaṃ</i>);<br><br>and also the requisites of life (<i>jīvitaparikkhārā</i>) that should be obtained by one gone forth – robes (<i>cīvara</i>), almsfood (<i>piṇḍapāta</i>), resting place (<i>senāsana</i>), and medicinal requisites (<i>gilānappaccayabhesajja</i>) – are easy to come by.<br><br>However, I did not go forth from the home life into homelessness for the sake of robes (<i>cīvarahetu</i>), nor for the sake of almsfood (<i>piṇḍapātahetu</i>)…pe… nor for the sake of a resting place (<i>senāsanahetu</i>)…pe… nor for the sake of medicinal requisites (<i>gilānappaccayabhesajjaparikkhārahetu</i>).<br><br>Moreover, while I am living here in dependence upon this jungle thicket, my unestablished mindfulness does not become established, my unconcentrated mind does not become concentrated, my undestroyed taints (<i>āsavā</i>) do not come to destruction, I do not attain the unattained supreme security from bondage (<i>anuttaraṃ yogakkhemaṃ</i>).’<br><br>Therefore, <i>bhikkhus</i>, having reflected thus, that <i>bhikkhu</i> should depart from that jungle thicket (<i>vanapatthā pakkamitabbaṃ</i>); he should not continue living there (<i>na vatthabbaṃ</i>).</div>
+                    </div>
+                    <div class="commentary-section">
+            
+                        <div class="commentary-pali commentary-pali-section" data-pali="192.Saṅkhāpīti evaṃ samaṇadhammassa anipphajjanabhāvaṃ jānitvā. Anantaravāre pana saṅkhāpīti evaṃ samaṇadhammassa nipphajjanabhāvaṃ jānitvā.">192.Saṅkhāpīti evaṃ samaṇadhammassa anipphajjanabhāvaṃ jānitvā. Anantaravāre pana saṅkhāpīti evaṃ samaṇadhammassa nipphajjanabhāvaṃ jānitvā.</div>
+                        <div class="commentary-english commentary-english-section">Paragraph 192. Knowing that in this way, the state of non-accomplishment of the ascetic&#039;s Dharma is Saṅkhāpī, and knowing that in the next turn, the state of accomplishment of the ascetic&#039;s Dharma is Saṅkhāpī.</div>
+                
+                    </div>
+                </div>
+            
+                <div class="paragraph">
+                    <div class="paragraph-number">193</div>
+                    <div class="mula-section">
+                        <div class="pali-text mula-pali-section" data-pali="193. ‘‘Idha  pana, bhikkhave, bhikkhu aññataraṃ vanapatthaṃ upanissāya viharati. Tassa taṃ vanapatthaṃ upanissāya viharato anupaṭṭhitā ceva sati upaṭṭhāti, asamāhitañca cittaṃ samādhiyati, aparikkhīṇā ca āsavā parikkhayaṃ gacchanti, ananuppattañca anuttaraṃ yogakkhemaṃ anupāpuṇāti. Ye ca kho ime pabbajitena jīvitaparikkhārā samudānetabbā – cīvarapiṇḍapātasenāsanagilānappaccayabhesajjaparikkhārā, te kasirena samudāgacchanti. Tena, bhikkhave, bhikkhunā iti paṭisañcikkhitabbaṃ  – ‘ahaṃ kho imaṃ vanapatthaṃ upanissāya viharāmi. Tassa me imaṃ vanapatthaṃ upanissāya viharato anupaṭṭhitā ceva sati upaṭṭhāti asamāhitañca cittaṃ samādhiyati, aparikkhīṇā ca āsavā parikkhayaṃ gacchanti, ananuppattañca anuttaraṃ yogakkhemaṃ anupāpuṇāmi. Ye ca kho ime pabbajitena jīvitaparikkhārā samudānetabbā – cīvarapiṇḍapātasenāsanagilānappaccayabhesajjaparikkhārā – te kasirena samudāgacchanti. Na kho panāhaṃ cīvarahetu agārasmā anagāriyaṃ pabbajito, na piṇḍapātahetu…pe… na senāsanahetu…pe… na gilānappaccayabhesajjaparikkhārahetu agārasmā anagāriyaṃ pabbajito . Atha ca pana me imaṃ vanapatthaṃ upanissāya viharato anupaṭṭhitā ceva sati upaṭṭhāti, asamāhitañca cittaṃ samādhiyati, aparikkhīṇā ca āsavā parikkhayaṃ gacchanti, ananuppattañca anuttaraṃ yogakkhemaṃ anupāpuṇāmī’ti. Tena, bhikkhave, bhikkhunā saṅkhāpi tasmiṃ vanapatthe vatthabbaṃ, na pakkamitabbaṃ.">193. ‘‘Idha  pana, bhikkhave, bhikkhu aññataraṃ vanapatthaṃ upanissāya viharati. Tassa taṃ vanapatthaṃ upanissāya viharato anupaṭṭhitā ceva sati upaṭṭhāti, asamāhitañca cittaṃ samādhiyati, aparikkhīṇā ca āsavā parikkhayaṃ gacchanti, ananuppattañca anuttaraṃ yogakkhemaṃ anupāpuṇāti. Ye ca kho ime pabbajitena jīvitaparikkhārā samudānetabbā – cīvarapiṇḍapātasenāsanagilānappaccayabhesajjaparikkhārā, te kasirena samudāgacchanti. Tena, bhikkhave, bhikkhunā iti paṭisañcikkhitabbaṃ  – ‘ahaṃ kho imaṃ vanapatthaṃ upanissāya viharāmi. Tassa me imaṃ vanapatthaṃ upanissāya viharato anupaṭṭhitā ceva sati upaṭṭhāti asamāhitañca cittaṃ samādhiyati, aparikkhīṇā ca āsavā parikkhayaṃ gacchanti, ananuppattañca anuttaraṃ yogakkhemaṃ anupāpuṇāmi. Ye ca kho ime pabbajitena jīvitaparikkhārā samudānetabbā – cīvarapiṇḍapātasenāsanagilānappaccayabhesajjaparikkhārā – te kasirena samudāgacchanti. Na kho panāhaṃ cīvarahetu agārasmā anagāriyaṃ pabbajito, na piṇḍapātahetu…pe… na senāsanahetu…pe… na gilānappaccayabhesajjaparikkhārahetu agārasmā anagāriyaṃ pabbajito . Atha ca pana me imaṃ vanapatthaṃ upanissāya viharato anupaṭṭhitā ceva sati upaṭṭhāti, asamāhitañca cittaṃ samādhiyati, aparikkhīṇā ca āsavā parikkhayaṃ gacchanti, ananuppattañca anuttaraṃ yogakkhemaṃ anupāpuṇāmī’ti. Tena, bhikkhave, bhikkhunā saṅkhāpi tasmiṃ vanapatthe vatthabbaṃ, na pakkamitabbaṃ.</div>
+                        <div class="translation-text mula-english-section">“Here, <i>bhikkhus</i>, a <i>bhikkhu</i> lives dependent upon a certain jungle thicket. While he is living dependent on that jungle thicket, his unestablished mindfulness becomes established, his unconcentrated mind becomes concentrated, his undestroyed taints come to destruction, and he attains the unattained supreme security from bondage ( <i>anuttaraṃ yogakkhemaṃ</i>). And also the requisites of life that should be obtained by one gone forth – robes (<i>cīvara</i>), almsfood (<i>piṇḍapāta</i>), resting place (<i>senāsana</i>), and medicinal requisites (<i>gilānappaccayabhesajjaparikkhārā</i>) – are hard to come by.<br><br>“The <i>bhikkhu</i> should consider thus: ‘I am living dependent upon this jungle thicket. While I am living dependent on this jungle thicket, my unestablished mindfulness becomes established, my unconcentrated mind becomes concentrated, my undestroyed taints come to destruction, and I attain the unattained supreme security from bondage. And also the requisites of life that should be obtained by one gone forth – robes, almsfood, resting place, and medicinal requisites – are hard to come by. However, I did not go forth from the home life into homelessness for the sake of robes, not for the sake of almsfood... not for the sake of a resting place... not for the sake of medicinal requisites. Moreover, while I am living dependent upon this jungle thicket, my unestablished mindfulness becomes established, my unconcentrated mind becomes concentrated, my undestroyed taints come to destruction, and I attain the unattained supreme security from bondage.’<br><br>“Having reflected thus, that <i>bhikkhu</i> should continue living in that jungle thicket; he should not depart.</div>
+                    </div>
+                    <div class="commentary-section">
+            
+                        <div class="commentary-pali commentary-pali-section" data-pali=""></div>
+                        <div class="commentary-english commentary-english-section"></div>
+                
+                    </div>
+                </div>
+            
+                <div class="paragraph">
+                    <div class="paragraph-number">194</div>
+                    <div class="mula-section">
+                        <div class="pali-text mula-pali-section" data-pali="194. ‘‘Idha  pana, bhikkhave, bhikkhu aññataraṃ vanapatthaṃ upanissāya viharati. Tassa taṃ vanapatthaṃ upanissāya viharato anupaṭṭhitā ceva sati upaṭṭhāti, asamāhitañca cittaṃ samādhiyati, aparikkhīṇā ca āsavā parikkhayaṃ gacchanti, ananuppattañca anuttaraṃ yogakkhemaṃ anupāpuṇāti. Ye ca kho ime pabbajitena jīvitaparikkhārā samudānetabbā – cīvarapiṇḍapātasenāsanagilānappaccayabhesajjaparikkhārā – te appakasirena samudāgacchanti. Tena, bhikkhave, bhikkhunā iti paṭisañcikkhitabbaṃ – ‘ahaṃ kho imaṃ vanapatthaṃ upanissāya viharāmi. Tassa me imaṃ vanapatthaṃ upanissāya viharato anupaṭṭhitā ceva sati upaṭṭhāti asamāhitañca cittaṃ samādhiyati, aparikkhīṇā ca āsavā parikkhayaṃ gacchanti, ananuppattañca anuttaraṃ yogakkhemaṃ anupāpuṇāmi. Ye ca kho ime pabbajitena jīvitaparikkhārā samudānetabbā – cīvarapiṇḍapātasenāsanagilānappaccayabhesajjaparikkhārā – te appakasirena samudāgacchantī’ti . Tena, bhikkhave, bhikkhunā yāvajīvampi tasmiṃ vanapatthe vatthabbaṃ, na pakkamitabbaṃ.">194. ‘‘Idha  pana, bhikkhave, bhikkhu aññataraṃ vanapatthaṃ upanissāya viharati. Tassa taṃ vanapatthaṃ upanissāya viharato anupaṭṭhitā ceva sati upaṭṭhāti, asamāhitañca cittaṃ samādhiyati, aparikkhīṇā ca āsavā parikkhayaṃ gacchanti, ananuppattañca anuttaraṃ yogakkhemaṃ anupāpuṇāti. Ye ca kho ime pabbajitena jīvitaparikkhārā samudānetabbā – cīvarapiṇḍapātasenāsanagilānappaccayabhesajjaparikkhārā – te appakasirena samudāgacchanti. Tena, bhikkhave, bhikkhunā iti paṭisañcikkhitabbaṃ – ‘ahaṃ kho imaṃ vanapatthaṃ upanissāya viharāmi. Tassa me imaṃ vanapatthaṃ upanissāya viharato anupaṭṭhitā ceva sati upaṭṭhāti asamāhitañca cittaṃ samādhiyati, aparikkhīṇā ca āsavā parikkhayaṃ gacchanti, ananuppattañca anuttaraṃ yogakkhemaṃ anupāpuṇāmi. Ye ca kho ime pabbajitena jīvitaparikkhārā samudānetabbā – cīvarapiṇḍapātasenāsanagilānappaccayabhesajjaparikkhārā – te appakasirena samudāgacchantī’ti . Tena, bhikkhave, bhikkhunā yāvajīvampi tasmiṃ vanapatthe vatthabbaṃ, na pakkamitabbaṃ.</div>
+                        <div class="translation-text mula-english-section">“Here, <i>bhikkhus</i>, a <i>bhikkhu</i> lives in dependence upon a certain jungle thicket. While he is living in dependence upon that jungle thicket, his unestablished mindfulness becomes established, his unconcentrated mind becomes concentrated, his undestroyed taints (<i>āsavā</i>) come to destruction, and he attains the unattained supreme security from bondage (<i>anuttaraṃ yogakkhemaṃ</i>). And also the requisites of life (<i>jīvitaparikkhārā</i>) that should be obtained by one gone forth (<i>pabbajitena</i>) - robes (<i>cīvara</i>), almsfood (<i>piṇḍapāta</i>), resting place (<i>senāsana</i>), and medicinal requisites (<i>gilānappaccayabhesajjaparikkhārā</i>) - are easy to come by.<br><br>Therefore, <i>bhikkhus</i>, the <i>bhikkhu</i> should consider thus: ‘I am living in dependence upon this jungle thicket.’ While I am living here in dependence upon this jungle thicket, my unestablished mindfulness has become established, my unconcentrated mind has become concentrated, my undestroyed taints (<i>āsavā</i>) have come to destruction, and I have attained the unattained supreme security from bondage (<i>anuttaraṃ yogakkhemaṃ</i>). And also the requisites of life (<i>jīvitaparikkhārā</i>) that should be obtained by one gone forth (<i>pabbajitena</i>) - robes (<i>cīvara</i>), almsfood (<i>piṇḍapāta</i>), resting place (<i>senāsana</i>), and medicinal requisites (<i>gilānappaccayabhesajjaparikkhārā</i>) - are easy to come by.’<br><br>Therefore, <i>bhikkhus</i>, that <i>bhikkhu</i> should continue living in that jungle thicket as long as life lasts; he should not depart.</div>
+                    </div>
+                    <div class="commentary-section">
+            
+                        <div class="commentary-pali commentary-pali-section" data-pali="194.Yāvajīvanti yāva jīvitaṃ pavattati, tāva vatthabbameva.">194.Yāvajīvanti yāva jīvitaṃ pavattati, tāva vatthabbameva.</div>
+                        <div class="commentary-english commentary-english-section">194.<br>yāvajīvanti (as long as life lasts) yāva jīvitaṃ pavattati, tāva vatthabbameva (so long as life continues, so long should one speak thus).<br></div>
+                
+                    </div>
+                </div>
+            
+                <div class="paragraph">
+                    <div class="paragraph-number">195</div>
+                    <div class="mula-section">
+                        <div class="pali-text mula-pali-section" data-pali="195. ‘‘Idha, bhikkhave, bhikkhu aññataraṃ gāmaṃ upanissāya viharati  …pe… aññataraṃ nigamaṃ upanissāya viharati…pe… aññataraṃ nagaraṃ upanissāya viharati…pe… aññataraṃ janapadaṃ upanissāya viharati…pe… aññataraṃ puggalaṃ upanissāya viharati. Tassa taṃ puggalaṃ upanissāya viharato anupaṭṭhitā ceva sati na upaṭṭhāti, asamāhitañca cittaṃ na samādhiyati, aparikkhīṇā ca āsavā na parikkhayaṃ gacchanti, ananuppattañca anuttaraṃ yogakkhemaṃ nānupāpuṇāti. Ye ca kho ime pabbajitena jīvitaparikkhārā samudānetabbā – cīvarapiṇḍapātasenāsanagilānappaccayabhesajjaparikkhārā – te kasirena samudāgacchanti. Tena, bhikkhave, bhikkhunā iti paṭisañcikkhitabbaṃ – ‘ahaṃ kho imaṃ puggalaṃ upanissāya viharāmi. Tassa me imaṃ puggalaṃ upanissāya viharato anupaṭṭhitā ceva sati na upaṭṭhāti, asamāhitañca cittaṃ na samādhiyati, aparikkhīṇā ca āsavā na parikkhayaṃ gacchanti, ananuppattañca anuttaraṃ yogakkhemaṃ nānupāpuṇāmi. Ye ca kho ime pabbajitena jīvitaparikkhārā samudānetabbā – cīvarapiṇḍapātasenāsanagilānappaccayabhesajjaparikkhārā – te kasirena samudāgacchantī’ti. Tena, bhikkhave, bhikkhunā rattibhāgaṃ vā divasabhāgaṃ vā so puggalo anāpucchā pakkamitabbaṃ, nānubandhitabbo.">195. ‘‘Idha, bhikkhave, bhikkhu aññataraṃ gāmaṃ upanissāya viharati  …pe… aññataraṃ nigamaṃ upanissāya viharati…pe… aññataraṃ nagaraṃ upanissāya viharati…pe… aññataraṃ janapadaṃ upanissāya viharati…pe… aññataraṃ puggalaṃ upanissāya viharati. Tassa taṃ puggalaṃ upanissāya viharato anupaṭṭhitā ceva sati na upaṭṭhāti, asamāhitañca cittaṃ na samādhiyati, aparikkhīṇā ca āsavā na parikkhayaṃ gacchanti, ananuppattañca anuttaraṃ yogakkhemaṃ nānupāpuṇāti. Ye ca kho ime pabbajitena jīvitaparikkhārā samudānetabbā – cīvarapiṇḍapātasenāsanagilānappaccayabhesajjaparikkhārā – te kasirena samudāgacchanti. Tena, bhikkhave, bhikkhunā iti paṭisañcikkhitabbaṃ – ‘ahaṃ kho imaṃ puggalaṃ upanissāya viharāmi. Tassa me imaṃ puggalaṃ upanissāya viharato anupaṭṭhitā ceva sati na upaṭṭhāti, asamāhitañca cittaṃ na samādhiyati, aparikkhīṇā ca āsavā na parikkhayaṃ gacchanti, ananuppattañca anuttaraṃ yogakkhemaṃ nānupāpuṇāmi. Ye ca kho ime pabbajitena jīvitaparikkhārā samudānetabbā – cīvarapiṇḍapātasenāsanagilānappaccayabhesajjaparikkhārā – te kasirena samudāgacchantī’ti. Tena, bhikkhave, bhikkhunā rattibhāgaṃ vā divasabhāgaṃ vā so puggalo anāpucchā pakkamitabbaṃ, nānubandhitabbo.</div>
+                        <div class="translation-text mula-english-section">&quot;195.<br><br>Here, mendicants, a mendicant lives in dependence upon a certain village... a certain town... a certain city... a certain country... a certain person.<br><br>While he is living in dependence upon that person, his unestablished mindfulness does not become established, his unconcentrated mind does not become concentrated, his undestroyed taints (āsava) do not come to destruction, and he does not attain the unattained supreme security from bondage (anuttaraṃ yogakkhemaṃ).<br><br>And also the requisites of life (jīvitaparikkhārā) that should be obtained by one gone forth – robes (cīvara), almsfood (piṇḍapāta), resting place (senāsana), and medicinal requisites (gilānappaccayabhesajja) – are hard to come by.<br><br>The mendicant should consider thus: ‘I am living in dependence upon this person.’<br><br>While I am living in dependence upon this person, my unestablished mindfulness does not become established, my unconcentrated mind does not become concentrated, my undestroyed taints (āsava) do not come to destruction, and I do not attain the unattained supreme security from bondage (anuttaraṃ yogakkhemaṃ).<br><br>And also the requisites of life (jīvitaparikkhārā) that should be obtained by one gone forth – robes (cīvara), almsfood (piṇḍapāta), resting place (senāsana), and medicinal requisites (gilānappaccayabhesajja) – are hard to come by.’<br><br>Therefore, mendicants, that mendicant should depart from that person without taking leave, neither during the night nor during the day; he should not continue following him.</div>
+                    </div>
+                    <div class="commentary-section">
+            
+                        <div class="commentary-pali commentary-pali-section" data-pali="195.So puggaloti padassa nānubandhitabboti iminā sambandho. Anāpucchāti idha pana taṃ puggalaṃ anāpucchā pakkamitabbanti attho.">195.So puggaloti padassa nānubandhitabboti iminā sambandho. Anāpucchāti idha pana taṃ puggalaṃ anāpucchā pakkamitabbanti attho.</div>
+                        <div class="commentary-english commentary-english-section">&quot;So <i>puggala</i>,&quot; the connection is with the statement that this word should not be pursued.<br><br>&quot;Without asking&quot;: Here, however, it means that one should leave without asking that person.</div>
+                
+                    </div>
+                </div>
+            
+                <div class="paragraph">
+                    <div class="paragraph-number">196</div>
+                    <div class="mula-section">
+                        <div class="pali-text mula-pali-section" data-pali="196. ‘‘Idha pana, bhikkhave, bhikkhu aññataraṃ puggalaṃ upanissāya viharati. Tassa taṃ  puggalaṃ upanissāya viharato anupaṭṭhitā  ceva sati na upaṭṭhāti, asamāhitañca cittaṃ na samādhiyati, aparikkhīṇā ca  āsavā na parikkhayaṃ gacchanti, ananuppattañca anuttaraṃ yogakkhemaṃ nānupāpuṇāti. Ye ca kho ime pabbajitena jīvitaparikkhārā samudānetabbā – cīvarapiṇḍapātasenāsanagilānappaccayabhesajjaparikkhārā, te appakasirena samudāgacchanti. Tena, bhikkhave, bhikkhunā iti paṭisañcikkhitabbaṃ – ‘ahaṃ kho imaṃ puggalaṃ upanissāya viharāmi. Tassa me imaṃ puggalaṃ upanissāya viharato anupaṭṭhitā ceva sati na upaṭṭhāti, asamāhitañca cittaṃ na samādhiyati, aparikkhīṇā ca āsavā na parikkhayaṃ gacchanti, ananuppattañca anuttaraṃ yogakkhemaṃ nānupāpuṇāmi. Ye ca kho ime pabbajitena jīvitaparikkhārā samudānetabbā – cīvarapiṇḍapātasenāsanagilānappaccayabhesajjaparikkhārā  – te appakasirena samudāgacchanti. Na kho panāhaṃ cīvarahetu agārasmā anagāriyaṃ pabbajito, na piṇḍapātahetu…pe… na senāsanahetu…pe… na gilānappaccayabhesajjaparikkhārahetu agārasmā anagāriyaṃ pabbajito. Atha ca pana me imaṃ puggalaṃ upanissāya viharato anupaṭṭhitā ceva sati na upaṭṭhāti, asamāhitañca cittaṃ na samādhiyati, aparikkhīṇā ca āsavā na parikkhayaṃ gacchanti, ananuppattañca anuttaraṃ yogakkhemaṃ nānupāpuṇāmī’ti. Tena, bhikkhave, bhikkhunā saṅkhāpi so puggalo āpucchā pakkamitabbaṃ, nānubandhitabbo.">196. ‘‘Idha pana, bhikkhave, bhikkhu aññataraṃ puggalaṃ upanissāya viharati. Tassa taṃ  puggalaṃ upanissāya viharato anupaṭṭhitā  ceva sati na upaṭṭhāti, asamāhitañca cittaṃ na samādhiyati, aparikkhīṇā ca  āsavā na parikkhayaṃ gacchanti, ananuppattañca anuttaraṃ yogakkhemaṃ nānupāpuṇāti. Ye ca kho ime pabbajitena jīvitaparikkhārā samudānetabbā – cīvarapiṇḍapātasenāsanagilānappaccayabhesajjaparikkhārā, te appakasirena samudāgacchanti. Tena, bhikkhave, bhikkhunā iti paṭisañcikkhitabbaṃ – ‘ahaṃ kho imaṃ puggalaṃ upanissāya viharāmi. Tassa me imaṃ puggalaṃ upanissāya viharato anupaṭṭhitā ceva sati na upaṭṭhāti, asamāhitañca cittaṃ na samādhiyati, aparikkhīṇā ca āsavā na parikkhayaṃ gacchanti, ananuppattañca anuttaraṃ yogakkhemaṃ nānupāpuṇāmi. Ye ca kho ime pabbajitena jīvitaparikkhārā samudānetabbā – cīvarapiṇḍapātasenāsanagilānappaccayabhesajjaparikkhārā  – te appakasirena samudāgacchanti. Na kho panāhaṃ cīvarahetu agārasmā anagāriyaṃ pabbajito, na piṇḍapātahetu…pe… na senāsanahetu…pe… na gilānappaccayabhesajjaparikkhārahetu agārasmā anagāriyaṃ pabbajito. Atha ca pana me imaṃ puggalaṃ upanissāya viharato anupaṭṭhitā ceva sati na upaṭṭhāti, asamāhitañca cittaṃ na samādhiyati, aparikkhīṇā ca āsavā na parikkhayaṃ gacchanti, ananuppattañca anuttaraṃ yogakkhemaṃ nānupāpuṇāmī’ti. Tena, bhikkhave, bhikkhunā saṅkhāpi so puggalo āpucchā pakkamitabbaṃ, nānubandhitabbo.</div>
+                        <div class="translation-text mula-english-section">“Here, bhikkhus, a bhikkhu lives in dependence upon a certain person. While he is living in dependence upon that person, his unestablished mindfulness does not become established, his unconcentrated mind does not become concentrated, his undestroyed taints do not come to destruction, he does not attain the unattained supreme security from bondage. And also the requisites of life that should be obtained by one gone forth – robes ( <i>cīvara</i>), almsfood ( <i>piṇḍapāta</i>), resting place (<i>senāsana</i>), and medicinal requisites (<i>gilānappaccayabhesajjaparikkhārā</i>) – are easy to come by. The bhikkhu should consider thus: ‘I am living in dependence upon this person. While I am living in dependence upon this person, my unestablished mindfulness does not become established, my unconcentrated mind does not become concentrated, my undestroyed taints do not come to destruction, I do not attain the unattained supreme security from bondage. And also the requisites of life that should be obtained by one gone forth – robes, almsfood, resting place, and medicinal requisites – are easy to come by. However, I did not go forth from the home life into homelessness for the sake of robes, almsfood, resting place, and medicinal requisites. Moreover, while I am living in dependence upon this person, my unestablished mindfulness does not become established, my unconcentrated mind does not become concentrated, my undestroyed taints do not come to destruction, I do not attain the unattained supreme security from bondage.’ Having reflected thus, that bhikkhu should depart from that person after taking leave; he should not continue following him.</div>
+                    </div>
+                    <div class="commentary-section">
+            
+                        <div class="commentary-pali commentary-pali-section" data-pali=""></div>
+                        <div class="commentary-english commentary-english-section"></div>
+                
+                    </div>
+                </div>
+            
+                <div class="paragraph">
+                    <div class="paragraph-number">197</div>
+                    <div class="mula-section">
+                        <div class="pali-text mula-pali-section" data-pali="197. ‘‘Idha pana, bhikkhave, bhikkhu aññataraṃ puggalaṃ upanissāya viharati. Tassa taṃ puggalaṃ upanissāya viharato anupaṭṭhitā ceva sati upaṭṭhāti, asamāhitañca  cittaṃ samādhiyati, aparikkhīṇā ca āsavā parikkhayaṃ gacchanti, ananuppattañca anuttaraṃ yogakkhemaṃ anupāpuṇāti. Ye ca kho ime pabbajitena jīvitaparikkhārā samudānetabbā – cīvarapiṇḍapātasenāsanagilānappaccayabhesajjaparikkhārā – te kasirena samudāgacchanti. Tena, bhikkhave, bhikkhunā iti paṭisañcikkhitabbaṃ – ‘ahaṃ kho imaṃ puggalaṃ upanissāya viharāmi. Tassa me imaṃ puggalaṃ upanissāya viharato anupaṭṭhitā ceva sati upaṭṭhāti, asamāhitañca cittaṃ samādhiyati, aparikkhīṇā ca āsavā parikkhayaṃ gacchanti, ananuppattañca anuttaraṃ yogakkhemaṃ anupāpuṇāmi. Ye ca kho ime pabbajitena jīvitaparikkhārā samudānetabbā – cīvarapiṇḍapātasenāsanagilānappaccayabhesajjaparikkhārā – te kasirena samudāgacchanti. Na kho panāhaṃ cīvarahetu agārasmā anagāriyaṃ pabbajito, na piṇḍapātahetu…pe… na senāsanahetu…pe… na gilānappaccayabhesajjaparikkhārahetu agārasmā  anagāriyaṃ pabbajito. Atha ca pana me imaṃ puggalaṃ upanissāya viharato anupaṭṭhitā ceva sati upaṭṭhāti, asamāhitañca cittaṃ samādhiyati, aparikkhīṇā ca āsavā parikkhayaṃ gacchanti, ananuppattañca anuttaraṃ yogakkhemaṃ anupāpuṇāmī’ti. Tena, bhikkhave, bhikkhunā saṅkhāpi so puggalo anubandhitabbo, na pakkamitabbaṃ.">197. ‘‘Idha pana, bhikkhave, bhikkhu aññataraṃ puggalaṃ upanissāya viharati. Tassa taṃ puggalaṃ upanissāya viharato anupaṭṭhitā ceva sati upaṭṭhāti, asamāhitañca  cittaṃ samādhiyati, aparikkhīṇā ca āsavā parikkhayaṃ gacchanti, ananuppattañca anuttaraṃ yogakkhemaṃ anupāpuṇāti. Ye ca kho ime pabbajitena jīvitaparikkhārā samudānetabbā – cīvarapiṇḍapātasenāsanagilānappaccayabhesajjaparikkhārā – te kasirena samudāgacchanti. Tena, bhikkhave, bhikkhunā iti paṭisañcikkhitabbaṃ – ‘ahaṃ kho imaṃ puggalaṃ upanissāya viharāmi. Tassa me imaṃ puggalaṃ upanissāya viharato anupaṭṭhitā ceva sati upaṭṭhāti, asamāhitañca cittaṃ samādhiyati, aparikkhīṇā ca āsavā parikkhayaṃ gacchanti, ananuppattañca anuttaraṃ yogakkhemaṃ anupāpuṇāmi. Ye ca kho ime pabbajitena jīvitaparikkhārā samudānetabbā – cīvarapiṇḍapātasenāsanagilānappaccayabhesajjaparikkhārā – te kasirena samudāgacchanti. Na kho panāhaṃ cīvarahetu agārasmā anagāriyaṃ pabbajito, na piṇḍapātahetu…pe… na senāsanahetu…pe… na gilānappaccayabhesajjaparikkhārahetu agārasmā  anagāriyaṃ pabbajito. Atha ca pana me imaṃ puggalaṃ upanissāya viharato anupaṭṭhitā ceva sati upaṭṭhāti, asamāhitañca cittaṃ samādhiyati, aparikkhīṇā ca āsavā parikkhayaṃ gacchanti, ananuppattañca anuttaraṃ yogakkhemaṃ anupāpuṇāmī’ti. Tena, bhikkhave, bhikkhunā saṅkhāpi so puggalo anubandhitabbo, na pakkamitabbaṃ.</div>
+                        <div class="translation-text mula-english-section">“Here, bhikkhus, a bhikkhu lives in dependence upon a certain person. While he is living in dependence upon that person, his unestablished mindfulness becomes established, his unconcentrated mind becomes concentrated, his undestroyed taints come to destruction, he attains the unattained supreme security from bondage (anuttaraṃ yogakkhemaṃ). And also the requisites of life that should be obtained by one gone forth – robes (cīvara), almsfood (piṇḍapāta), resting place (senāsana), and medicinal requisites (gilānappaccayabhesajjaparikkhārā) – are hard to come by. The bhikkhu should consider thus: ‘I am living in dependence upon this person. While I am living in dependence upon this person, my unestablished mindfulness becomes established, my unconcentrated mind becomes concentrated, my undestroyed taints come to destruction, I attain the unattained supreme security from bondage (anuttaraṃ yogakkhemaṃ). And also the requisites of life that should be obtained by one gone forth – robes (cīvara), almsfood (piṇḍapāta), resting place (senāsana), and medicinal requisites (gilānappaccayabhesajjaparikkhārā) – are hard to come by. However, I did not go forth from the home life (agārasmā) into homelessness (anagāriyaṃ) for the sake of robes (cīvarahetu), nor for the sake of almsfood… nor for the sake of a resting place… nor for the sake of medicinal requisites (gilānappaccayabhesajjaparikkhārahetu) from the home (agārasmā) to homelessness (anagāriyaṃ). Moreover, while I am living in dependence upon this person, my unestablished mindfulness becomes established, my unconcentrated mind becomes concentrated, my undestroyed taints come to destruction, I have attained the unattained supreme security from bondage (anuttaraṃ yogakkhemaṃ.’ Having reflected thus, that bhikkhu should continue following that person; he should not depart from him.</div>
+                    </div>
+                    <div class="commentary-section">
+            
+                        <div class="commentary-pali commentary-pali-section" data-pali="197.Saṅkhāpīti evaṃ samaṇadhammassa anipphajjanabhāvaṃ ñatvā so puggalo nānubandhitabbo, taṃ āpucchā pakkamitabbaṃ.">197.Saṅkhāpīti evaṃ samaṇadhammassa anipphajjanabhāvaṃ ñatvā so puggalo nānubandhitabbo, taṃ āpucchā pakkamitabbaṃ.</div>
+                        <div class="commentary-english commentary-english-section">Saṅkhāpī: Having understood thus that the monastic practice does not arise, that person should not be followed persistently, but having taken leave, one should depart.</div>
+                
+                    </div>
+                </div>
+            
+                <div class="paragraph">
+                    <div class="paragraph-number">198</div>
+                    <div class="mula-section">
+                        <div class="pali-text mula-pali-section" data-pali="198. ‘‘Idha pana, bhikkhave, bhikkhu aññataraṃ puggalaṃ upanissāya viharati. Tassa taṃ puggalaṃ upanissāya viharato anupaṭṭhitā ceva sati  upaṭṭhāti, asamāhitañca cittaṃ samādhiyati, aparikkhīṇā ca āsavā parikkhayaṃ gacchanti , ananuppattañca anuttaraṃ yogakkhemaṃ anupāpuṇāti. Ye ca kho ime pabbajitena jīvitaparikkhārā samudānetabbā – cīvarapiṇḍapātasenāsanagilānappaccayabhesajjaparikkhārā – te appakasirena samudāgacchanti. Tena, bhikkhave, bhikkhunā iti paṭisañcikkhitabbaṃ – ‘ahaṃ kho imaṃ puggalaṃ upanissāya viharāmi . Tassa me imaṃ puggalaṃ upanissāya viharato anupaṭṭhitā ceva sati upaṭṭhāti, asamāhitañca cittaṃ samādhiyati, aparikkhīṇā ca āsavā parikkhayaṃ gacchanti, ananuppattañca anuttaraṃ yogakkhemaṃ anupāpuṇāmi. Ye ca kho ime pabbajitena jīvitaparikkhārā samudānetabbā – cīvarapiṇḍapātasenāsanagilānappaccayabhesajjaparikkhārā – te appakasirena samudāgacchantī’ti. Tena, bhikkhave, bhikkhunā yāvajīvampi so puggalo anubandhitabbo, na pakkamitabbaṃ, api panujjamānenapī’’ti api paṇujjamānenāti (?). Idamavoca bhagavā. Attamanā te bhikkhū bhagavato bhāsitaṃ abhinandunti. Vanapatthasuttaṃ niṭṭhitaṃ sattamaṃ.">198. ‘‘Idha pana, bhikkhave, bhikkhu aññataraṃ puggalaṃ upanissāya viharati. Tassa taṃ puggalaṃ upanissāya viharato anupaṭṭhitā ceva sati  upaṭṭhāti, asamāhitañca cittaṃ samādhiyati, aparikkhīṇā ca āsavā parikkhayaṃ gacchanti , ananuppattañca anuttaraṃ yogakkhemaṃ anupāpuṇāti. Ye ca kho ime pabbajitena jīvitaparikkhārā samudānetabbā – cīvarapiṇḍapātasenāsanagilānappaccayabhesajjaparikkhārā – te appakasirena samudāgacchanti. Tena, bhikkhave, bhikkhunā iti paṭisañcikkhitabbaṃ – ‘ahaṃ kho imaṃ puggalaṃ upanissāya viharāmi . Tassa me imaṃ puggalaṃ upanissāya viharato anupaṭṭhitā ceva sati upaṭṭhāti, asamāhitañca cittaṃ samādhiyati, aparikkhīṇā ca āsavā parikkhayaṃ gacchanti, ananuppattañca anuttaraṃ yogakkhemaṃ anupāpuṇāmi. Ye ca kho ime pabbajitena jīvitaparikkhārā samudānetabbā – cīvarapiṇḍapātasenāsanagilānappaccayabhesajjaparikkhārā – te appakasirena samudāgacchantī’ti. Tena, bhikkhave, bhikkhunā yāvajīvampi so puggalo anubandhitabbo, na pakkamitabbaṃ, api panujjamānenapī’’ti api paṇujjamānenāti (?). Idamavoca bhagavā. Attamanā te bhikkhū bhagavato bhāsitaṃ abhinandunti. Vanapatthasuttaṃ niṭṭhitaṃ sattamaṃ.</div>
+                        <div class="translation-text mula-english-section">“Here, <i>bhikkhus</i>, a <i>bhikkhu</i> lives in dependence upon a certain person. While he is living in dependence upon that person, his unestablished mindfulness becomes established, his unconcentrated mind becomes concentrated, his undestroyed taints come to destruction, he attains the unattained supreme security from bondage ( <i>anuttaraṃ yogakkhemaṃ anupāpuṇāti</i>). And also the requisites of life that should be obtained by one gone forth – robes (<i>cīvara</i>), almsfood (<i>piṇḍapāta</i>), resting place (<i>senāsana</i>), and medicinal requisites (<i>gilānappaccayabhesajjaparikkhārā</i>) – are easy to come by. That <i>bhikkhu</i> should consider thus: ‘I am living in dependence upon this person.’ While I am living in dependence upon this person, my unestablished mindfulness has become established, my unconcentrated mind has become concentrated, my undestroyed taints come to destruction, I have attained the unattained supreme security from bondage. And also the requisites of life that should be obtained by one gone forth – robes, almsfood, resting place, and medicinal requisites – are easy to come by.’ That <i>bhikkhu</i> should continue following that person as long as life lasts; he should not depart from him even if told to go away.”<br><br>The Blessed One spoke thus. Elated, those <i>bhikkhus</i> delighted in the Blessed One’s statement.<br><br>The Seventh, the Vanapattha Sutta, is finished.</div>
+                    </div>
+                    <div class="commentary-section">
+            
+                        <div class="commentary-pali commentary-pali-section" data-pali="198.Apipanujjamānenāpīti api nikkaḍḍhīyamānenāpi. Evarūpo hi puggalo sacepi dārukalāpasataṃ vā udakaghaṭasataṃ vā vālikambaṇasataṃ vā daṇḍaṃ āharāpeti, mā idha vasīti nikkaḍḍhāpeti vā, taṃ taṃ khamāpetvā yāvajīvaṃ vatthabbamevāti. Papañcasūdaniyā majjhimanikāyaṭṭhakathāya Vanapatthapariyāyasuttavaṇṇanā niṭṭhitā.">198.Apipanujjamānenāpīti api nikkaḍḍhīyamānenāpi. Evarūpo hi puggalo sacepi dārukalāpasataṃ vā udakaghaṭasataṃ vā vālikambaṇasataṃ vā daṇḍaṃ āharāpeti, mā idha vasīti nikkaḍḍhāpeti vā, taṃ taṃ khamāpetvā yāvajīvaṃ vatthabbamevāti. Papañcasūdaniyā majjhimanikāyaṭṭhakathāya Vanapatthapariyāyasuttavaṇṇanā niṭṭhitā.</div>
+                        <div class="commentary-english commentary-english-section">198.<br><br>And also, &quot;while being driven out,&quot; means also while being expelled.<br><br>Indeed, if a person of such character were to bring a hundred bundles of firewood, or a hundred water jars, or a hundred blankets, or a staff, or if he were to drive [someone] out saying, &quot;Do not live here!&quot;, having asked forgiveness for that, one should live there for as long as life lasts.<br><br>The Commentary on the Majjhimanikāya, the Papañcasūdanī.<br><br>The commentary on the Vanapatthapariyāyasutta is complete.</div>
+                
+                    </div>
+                </div>
+            
+            </div>
+    
+            <div class="navigation">
+                <a href="../nikayas/mn/index.html" class="nav-btn home-btn">&larr; Back to Majjhima Nikāya</a>
+            </div>
+        </div>
+    
+        <script>
+            let currentView = {
+            };
+            
+            function loadAllSettings() {
+    // Load view settings like dark mode
+    const savedViews = localStorage.getItem('paliReaderSettings');
+    currentView = savedViews ? JSON.parse(savedViews) : {
+        mula_pali: true,
+        mula_english: true,
+        commentary_pali: false,
+        commentary_english: false,
+        devanagari: true
+    };
+    updateDisplay();
+    }
+            
+            // Save settings when changed
+            function saveSettings() {
+                localStorage.setItem('paliReaderSettings', JSON.stringify(currentView));
+            }
+    
+            function toggleView(type) {
+                currentView[type] = !currentView[type];
+                
+                const buttons = document.querySelectorAll('.btn.toggle');
+                buttons.forEach(btn => {
+                    let btnText = btn.textContent.toLowerCase();
+                    if ((type === 'mula_english' && btnText.includes('translation')) ||
+                        btnText.includes(type.replace('_', ' '))) {
+                        btn.classList.toggle('active', currentView[type]);
+                    }
+                });
+                  saveSettings();
+                  updateDisplay();
+            }
+    
+            function toggleScript() {
+                currentView.devanagari = !currentView.devanagari;
+                const btn = event.target;
+                btn.classList.toggle('active', currentView.devanagari);
+                document.body.classList.toggle('devanagari-script', currentView.devanagari);
+                updateDisplay();
+            }
+    
+            function toggleTheme() {
+                document.body.classList.toggle('dark-mode');
+                localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+            }
+    
+            function convertToDevanagari(text) {
+                if (!text) return text;
+                
+                text = text.toLowerCase();
+                
+                const consonants = {
+                    'k': 'क', 'kh': 'ख', 'g': 'ग', 'gh': 'घ', 'ṅ': 'ङ',
+                    'c': 'च', 'ch': 'छ', 'j': 'ज', 'jh': 'झ', 'ñ': 'ञ',
+                    'ṭ': 'ट', 'ṭh': 'ठ', 'ḍ': 'ड', 'ḍh': 'ढ', 'ṇ': 'ण',
+                    't': 'त', 'th': 'थ', 'd': 'द', 'dh': 'ध', 'n': 'न',
+                    'p': 'प', 'ph': 'फ', 'b': 'ब', 'bh': 'भ', 'm': 'म',
+                    'y': 'य', 'r': 'र', 'l': 'ल', 'v': 'व', 
+                    'ś': 'श', 'ṣ': 'ष', 's': 'स', 'h': 'ह'
+                };
+                
+                const vowelSigns = {
+                    'a': '', 'ā': 'ा', 'i': 'ि', 'ī': 'ी', 'u': 'ु', 'ū': 'ू',
+                    'e': 'े', 'o': 'ो'
+                };
+                
+                const independentVowels = {
+                    'a': 'अ', 'ā': 'आ', 'i': 'इ', 'ī': 'ई', 'u': 'उ', 'ū': 'ऊ',
+                    'e': 'ए', 'o': 'ओ'
+                };
+                
+                let result = '';
+                let i = 0;
+                
+                while (i < text.length) {
+                    const char = text[i];
+                    
+                    // Handle special characters
+                    if (char === 'ṃ' || char === 'ṁ') {
+                        result += 'ं';
+                        i++;
+                        continue;
+                    }
+                    if (char === 'ḥ') {
+                        result += 'ः';
+                        i++;
+                        continue;
+                    }
+                    if (' ,.?!–-""\'\'‘’"".'.includes(char)) {
+                        result += char;
+                        i++;
+                        continue;
+                    }
+                    
+                    // Check for consonants
+                    let consonantFound = null;
+                    let consonantLength = 0;
+                    
+                    // Try 2-character consonants first
+                    if (i + 1 < text.length) {
+                        const twoChar = char + text[i + 1];
+                        if (consonants[twoChar]) {
+                            consonantFound = consonants[twoChar];
+                            consonantLength = 2;
+                        }
+                    }
+                    
+                    // Try single character consonants
+                    if (!consonantFound && consonants[char]) {
+                        consonantFound = consonants[char];
+                        consonantLength = 1;
+                    }
+                    
+                    if (consonantFound) {
+                        const nextIndex = i + consonantLength;
+                        
+                        // Check what comes after the consonant
+                        if (nextIndex < text.length) {
+                            const nextChar = text[nextIndex];
+                            
+                            // If followed by a vowel sign, use it
+                            if (vowelSigns[nextChar] !== undefined) {
+                                result += consonantFound + vowelSigns[nextChar];
+                                i += consonantLength + 1;
+                            } 
+                            // If followed by another consonant or punctuation, no inherent 'a'
+                            else if (consonants[nextChar] || ' ,.?!–-'.includes(nextChar)) {
+                                result += consonantFound + '्';
+                                i += consonantLength;
+                            }
+                            // Otherwise, assume inherent 'a'
+                            else {
+                                result += consonantFound;
+                                i += consonantLength;
+                            }
+                        } else {
+                            result += consonantFound;
+                            i += consonantLength;
+                        }
+                        continue;
+                    }
+                    
+                    // Check for independent vowels
+                    if (independentVowels[char]) {
+                        result += independentVowels[char];
+                        i++;
+                        continue;
+                    }
+                    
+                    result += char;
+                    i++;
+                }
+                
+                return result;
+            }
+    
+            function convertToDevanagariPreservingHTML(text) {
+                const parts = text.split(/(<[^>]*>)/);
+                let result = '';
+                for (let part of parts) {
+                    if (part.startsWith('<') && part.endsWith('>')) {
+                        result += part;
+                    } else {
+                        result += convertToDevanagari(part);
+                    }
+                }
+                return result;
+            }
+    
+  function updateDisplay() {
+    // Update view toggles
+    document.querySelectorAll('.mula-pali-section').forEach(section => {
+        section.style.display = currentView.mula_pali ? 'block' : 'none';
+    });
+    document.querySelectorAll('.mula-english-section').forEach(section => {
+        section.style.display = currentView.mula_english ? 'block' : 'none';
+    });
+    document.querySelectorAll('.commentary-pali-section').forEach(section => {
+        section.style.display = currentView.commentary_pali ? 'block' : 'none';
+    });
+    document.querySelectorAll('.commentary-english-section').forEach(section => {
+        section.style.display = currentView.commentary_english ? 'block' : 'none';
+    });
+
+    // DEBUG: Check what's happening
+    console.log('Commentary visibility:', currentView.commentary_pali, currentView.commentary_english);
+    
+    // FIX: Check if ANY commentary is visible (regardless of content)
+    document.querySelectorAll('.paragraph').forEach(paragraph => {
+        const isCommentaryVisible = currentView.commentary_pali || currentView.commentary_english;
+        console.log('Setting with-commentary:', isCommentaryVisible);
+        paragraph.classList.toggle('with-commentary', isCommentaryVisible);
+    });
+
+    // Update button states
+    const paliBtn = document.querySelector('.btn.toggle[onclick="toggleView(\'mula_pali\')"]');
+    const transBtn = document.querySelector('.btn.toggle[onclick="toggleView(\'mula_english\')"]');
+    const commPaliBtn = document.querySelector('.btn.toggle[onclick="toggleView(\'commentary_pali\')"]');
+    const commEngBtn = document.querySelector('.btn.toggle[onclick="toggleView(\'commentary_english\')"]');
+    
+    if (paliBtn) paliBtn.classList.toggle('active', currentView.mula_pali);
+    if (transBtn) transBtn.classList.toggle('active', currentView.mula_english);
+    if (commPaliBtn) commPaliBtn.classList.toggle('active', currentView.commentary_pali);
+    if (commEngBtn) commEngBtn.classList.toggle('active', currentView.commentary_english);
+
+    // Handle Devanagari conversion
+    document.querySelectorAll('.pali-text').forEach(element => {
+        const originalText = element.getAttribute('data-pali');
+        if (currentView.devanagari) {
+            element.innerHTML = convertToDevanagariPreservingHTML(originalText);
+        } else {
+            element.innerHTML = originalText;
+        }
+    });
+    document.querySelectorAll('.commentary-pali').forEach(element => {
+        const originalText = element.getAttribute('data-pali');
+        if (currentView.devanagari) {
+            element.innerHTML = convertToDevanagariPreservingHTML(originalText);
+        } else {
+            element.innerHTML = originalText;
+        }
+    });
+}
+    
+            // Keyboard shortcuts
+            document.addEventListener('keydown', function(event) {
+                if (event.ctrlKey) {
+                    if (event.key === 'ArrowRight') {
+                        const paragraphs = document.querySelectorAll('.paragraph');
+                        const current = document.elementFromPoint(window.innerWidth/2, window.innerHeight/2);
+                        let currentIndex = Array.from(paragraphs).findIndex(p => p.contains(current));
+                        if (currentIndex < paragraphs.length - 1) {
+                            paragraphs[currentIndex + 1].scrollIntoView({ behavior: 'smooth' });
+                        }
+                        event.preventDefault();
+                    } else if (event.key === 'ArrowLeft') {
+                        const paragraphs = document.querySelectorAll('.paragraph');
+                        const current = document.elementFromPoint(window.innerWidth/2, window.innerHeight/2);
+                        let currentIndex = Array.from(paragraphs).findIndex(p => p.contains(current));
+                        if (currentIndex > 0) {
+                            paragraphs[currentIndex - 1].scrollIntoView({ behavior: 'smooth' });
+                        }
+                        event.preventDefault();
+                    }
+                }
+            });
+    
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.body.classList.add('dark-mode');
+            }
+            
+            document.addEventListener('DOMContentLoaded', loadAllSettings);
+
+            
+            document.body.classList.toggle('devanagari-script', currentView.devanagari);
+            updateDisplay();
+        </script>
+    </body>
+    </html>
+    
