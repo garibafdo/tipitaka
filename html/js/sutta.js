@@ -238,3 +238,142 @@ document.addEventListener('DOMContentLoaded', function() {
     document.body.classList.toggle('devanagari-script', currentView.devanagari);
     updateDisplay();
 });
+
+
+
+function safeSegmentSentences(text, language) {
+    try {
+        if (!text || typeof text !== 'string') return [];
+        
+        // Different rules for different languages
+        if (language === 'pali') {
+            // Conservative Pali segmentation
+            return text.split(/(?<=[.!?]”?\s+)/)
+                      .map(s => s.trim())
+                      .filter(s => s.length > 5); // Minimum length
+        } else {
+            // English segmentation
+            return text.split(/(?<=[.!?])\s+/)
+                      .map(s => s.trim())
+                      .filter(s => s.length > 10);
+        }
+    } catch (error) {
+        console.warn('Sentence segmentation failed:', error);
+        return [text]; // Fallback: treat entire text as one sentence
+    }
+}
+
+function createSafeSentenceMapping(paragraphData) {
+    const paliSentences = safeSegmentSentences(
+        paragraphData.mula_pali.replace(/<[^>]*>/g, ''),
+        'pali'
+    );
+    
+    const englishSentences = safeSegmentSentences(
+        paragraphData.mula_english,
+        'english'
+    );
+    
+    // If counts differ significantly, fall back to paragraph-level
+    if (Math.abs(paliSentences.length - englishSentences.length) > 2) {
+        console.warn(`Sentence count mismatch in paragraph ${paragraphData.paragraph_number}: Pali=${paliSentences.length}, English=${englishSentences.length}`);
+        return null; // Indicate mapping failed
+    }
+    
+    // Create mapping with bounds checking
+    const maxLength = Math.max(paliSentences.length, englishSentences.length);
+    const mapping = [];
+    
+    for (let i = 0; i < maxLength; i++) {
+        mapping.push({
+            pali: paliSentences[i] || '',
+            english: englishSentences[i] || '',
+            id: `${paragraphData.paragraph_number}.${i + 1}`,
+            reliable: !!(paliSentences[i] && englishSentences[i])
+        });
+    }
+    
+    return mapping;
+}
+
+
+function enhanceParagraphWithInteractiveSentences(paragraphElement, paragraphData) {
+    const mapping = createSafeSentenceMapping(paragraphData);
+    
+    // If mapping failed, add a subtle indicator and bail out
+    if (!mapping || mapping.length === 0) {
+        paragraphElement.classList.add('sentence-mapping-unavailable');
+        return;
+    }
+    
+    const englishSection = paragraphElement.querySelector('.translation-text');
+    const paliSection = paragraphElement.querySelector('.pali-text');
+    
+    if (!englishSection || !paliSection) return;
+    
+    // Clear existing content
+    englishSection.innerHTML = '';
+    paliSection.innerHTML = '';
+    
+    // Build interactive sentences
+    mapping.forEach((sentence, index) => {
+        if (sentence.english) {
+            const engSentence = createInteractiveSentence(sentence, 'english', index);
+            englishSection.appendChild(engSentence);
+        }
+        
+        if (sentence.pali) {
+            const paliSentence = createInteractiveSentence(sentence, 'pali', index);
+            paliSection.appendChild(paliSentence);
+        }
+    });
+    
+    paragraphElement.classList.add('sentence-mapping-available');
+}
+
+function createInteractiveSentence(sentenceData, language, index) {
+    const span = document.createElement('span');
+    span.className = `sentence ${language}-sentence`;
+    span.dataset.sentenceId = sentenceData.id;
+    span.dataset.language = language;
+    span.dataset.counterpartId = sentenceData.id;
+    
+    if (!sentenceData.reliable) {
+        span.classList.add('unreliable-mapping');
+        span.title = 'Sentence mapping may be inaccurate';
+    }
+    
+    span.textContent = language === 'pali' ? sentenceData.pali : sentenceData.english;
+    
+    return span;
+}
+
+// Main enhancement function
+function enhanceSuttaWithSentenceMapping() {
+    const paragraphs = document.querySelectorAll('.paragraph');
+    let successCount = 0;
+    let totalCount = 0;
+    
+    paragraphs.forEach(paragraph => {
+        totalCount++;
+        const paragraphNumber = paragraph.querySelector('.paragraph-number')?.textContent;
+        const paragraphData = getParagraphData(paragraphNumber); // You'd need to implement this
+        
+        if (paragraphData) {
+            const success = enhanceParagraphWithInteractiveSentences(paragraph, paragraphData);
+            if (success) successCount++;
+        }
+    });
+    
+    console.log(`Sentence mapping: ${successCount}/${totalCount} paragraphs enhanced`);
+    
+    // Add global hover handlers only if we have successful mappings
+    if (successCount > 0) {
+        initSentenceHoverHandlers();
+    }
+}
+
+// Only initialize if we have a reasonable success rate
+if (successCount > totalCount * 0.3) { // At least 30% success rate
+    initSentenceHoverHandlers();
+}
