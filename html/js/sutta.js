@@ -2,6 +2,134 @@
 // This file can be manually modified - script won't overwrite it
 
 let currentView = {};
+let paliDictionary = null; // Add this line
+
+async function loadPaliDictionary() {
+    try {
+        console.log('📚 Loading Pali-English dictionary...');
+        const response = await fetch('PEU.json');
+        if (!response.ok) throw new Error('Dictionary not found');
+        
+        paliDictionary = await response.json();
+        console.log(`✅ Dictionary loaded: ${Object.keys(paliDictionary).length} words`);
+        
+        // Enable dictionary features after loading
+        enableDictionaryFeatures();
+        
+    } catch (error) {
+        console.warn('❌ Could not load dictionary:', error);
+        paliDictionary = {}; // Fallback empty dict
+    }
+}
+
+
+function lookupPaliWord(word) {
+    if (!paliDictionary || !word) return null;
+    
+    
+        // Convert Devanagari to Roman if needed
+    let cleanWord = isDevanagari(word) ? devanagariToRoman(word) : word;
+    cleanWord = cleanWord.toLowerCase().replace(/[.,;!?()'"-]/g, '').trim();
+    
+    // Normalize different n/m characters to 'ṃ'
+    cleanWord = cleanWord.replace(/[ṁŋṅ]/g, 'ṃ');
+    console.log('cleanword ', cleanWord)
+    
+    // 1. Direct lookup
+    if (paliDictionary[cleanWord]) {
+        return paliDictionary[cleanWord];
+    }
+    
+    // 2. Try removing common endings
+    const endings = ['e', 'o', 'aṃ', 'ā', 'i', 'ī', 'u', 'ū', 'ya', 'yo', 'yā', 'ye'];
+    for (const ending of endings) {
+        if (cleanWord.endsWith(ending)) {
+            const stem = cleanWord.slice(0, -ending.length);
+            if (paliDictionary[stem]) {
+                return paliDictionary[stem];
+            }
+        }
+    }
+    
+    return null;
+}
+function isDevanagari(text) {
+    return /[\u0900-\u097F]/.test(text);
+}
+
+
+
+function devanagariToRoman(text) {
+    // Simple reverse conversion - you'll need to expand this
+    const devanagariToLatin = {
+        'क': 'k', 'ख': 'kh', 'ग': 'g', 'घ': 'gh', 'ङ': 'ṅ',
+        'च': 'c', 'छ': 'ch', 'ज': 'j', 'झ': 'jh', 'ञ': 'ñ',
+        'ट': 'ṭ', 'ठ': 'ṭh', 'ड': 'ḍ', 'ढ': 'ḍh', 'ण': 'ṇ',
+        'त': 't', 'थ': 'th', 'द': 'd', 'ध': 'dh', 'न': 'n',
+        'प': 'p', 'फ': 'ph', 'ब': 'b', 'भ': 'bh', 'म': 'm',
+        'य': 'y', 'र': 'r', 'ल': 'l', 'व': 'v',
+        'श': 'ś', 'ष': 'ṣ', 'स': 's', 'ह': 'h',
+        'अ': 'a', 'आ': 'ā', 'इ': 'i', 'ई': 'ī', 'उ': 'u', 'ऊ': 'ū',
+        'ए': 'e', 'ऐ': 'ai', 'ओ': 'o', 'औ': 'au',
+        'ं': 'ṃ', 'ः': 'ḥ'
+    };
+    
+    let result = '';
+    for (let char of text) {
+        result += devanagariToLatin[char] || char;
+    }
+    return result;
+}
+function enableDictionaryFeatures() {
+      console.log('🎯 Enabling dictionary features (middle-click)...');
+
+    document.addEventListener('mousedown', function(e) {
+        if (e.button === 1) { // Middle click
+            e.preventDefault();
+            
+            // Get clicked word
+            const word = getWordAtPoint(e.clientX, e.clientY);
+            if (word && word.length > 2) {
+              console.log('fn ',word);
+                showDictionary(word, e.clientX, e.clientY);
+            }
+        }
+    });
+}
+
+function getWordAtPoint(x, y) {
+    const range = document.caretRangeFromPoint(x, y);
+    if (!range) return null;
+    
+    range.expand('word');
+    
+    console.log(' getWordAtPoint ',range.toString().trim());
+    return range.toString().trim();
+}
+
+let currentDictElement = null;
+
+
+function handleEscape(e) {
+    if (e.key === 'Escape') {
+        hideDictionary();
+    }
+}
+
+function handleClickOutside(e) {
+    if (!e.target.closest('.dictionary-panel')) {
+        hideDictionary();
+    }
+}
+
+function hideDictionary() {
+    if (currentDictElement) {
+        currentDictElement.remove();
+        currentDictElement = null;
+    }
+    document.removeEventListener('keydown', handleEscape);
+    document.removeEventListener('mousedown', handleClickOutside);
+}
 
 function loadAllSettings() {
     const savedViews = localStorage.getItem('paliReaderSettings');
@@ -160,6 +288,10 @@ function convertToDevanagariPreservingHTML(text) {
 }
 
 function updateDisplay() {
+    document.querySelectorAll('.pali-text, .commentary-pali').forEach(element => {
+        element.textContent = ''; // Clear first
+    });
+    
     document.querySelectorAll('.mula-pali-section').forEach(section => {
         section.style.display = currentView.mula_pali ? 'block' : 'none';
     });
@@ -188,22 +320,71 @@ function updateDisplay() {
     if (commPaliBtn) commPaliBtn.classList.toggle('active', currentView.commentary_pali);
     if (commEngBtn) commEngBtn.classList.toggle('active', currentView.commentary_english);
 
-    document.querySelectorAll('.pali-text').forEach(element => {
-        const originalText = element.getAttribute('data-pali');
+   document.querySelectorAll('.pali-text').forEach(element => {
+    const originalText = element.getAttribute('data-pali');
+        //~ console.log("RAW DATA:", originalText); // Add this line
+
+    let cleanText = originalText.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+        //~ console.log("CLEAN TEXT:", cleanText); // Add this line
+
+    
+    if (currentView.devanagari) {
+        element.innerHTML = convertToDevanagariPreservingHTML(cleanText);  // Clean first!
+    } else {
+        element.innerHTML = cleanText;  // Use cleaned text
+    }
+    
+    document.querySelectorAll('.translation-text, .commentary-english').forEach(element => {
+        const originalHTML = element.innerHTML;
+        
         if (currentView.devanagari) {
-            element.innerHTML = convertToDevanagariPreservingHTML(originalText);
+            // Convert italicized Pali words in translation to Devanagari
+            element.innerHTML = convertItalicPaliToDevanagari(originalHTML);
         } else {
-            element.innerHTML = originalText;
+            element.innerHTML = originalHTML;
         }
     });
-    document.querySelectorAll('.commentary-pali').forEach(element => {
-        const originalText = element.getAttribute('data-pali');
-        if (currentView.devanagari) {
-            element.innerHTML = convertToDevanagariPreservingHTML(originalText);
-        } else {
-            element.innerHTML = originalText;
-        }
+    
+});
+
+
+
+function convertItalicPaliToDevanagari(html) {
+    // Remove <i> tags and convert content to Devanagari
+    html = html.replace(/<i>(.*?)<\/i>/g, function(match, paliText) {
+        // Clean any HTML from the Pali text before conversion
+        const cleanPaliText = paliText.replace(/<[^>]*>/g, '');
+        const devanagariText = convertToDevanagari(cleanPaliText);
+        return devanagariText;
     });
+    
+    // Remove <em> tags and convert content to Devanagari  
+    html = html.replace(/<em>(.*?)<\/em>/g, function(match, paliText) {
+        const cleanPaliText = paliText.replace(/<[^>]*>/g, '');
+        const devanagariText = convertToDevanagari(cleanPaliText);
+        return devanagariText;
+    });
+    
+    // Convert parenthetical Pali text
+    html = html.replace(/\(([^)]*[aāiīuūṛṝḷḹeēoōṃṁḥṅñṭḍṇśṣḻ][^)]*)\)/g, function(match, paliText) {
+        const cleanPaliText = paliText.replace(/<[^>]*>/g, '');
+        const devanagariText = convertToDevanagari(cleanPaliText);
+        return `(${devanagariText})`;
+    });
+    
+    return html;
+}
+
+document.querySelectorAll('.commentary-pali').forEach(element => {
+    const originalText = element.getAttribute('data-pali');
+    let cleanText = originalText.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+    
+    if (currentView.devanagari) {
+        element.innerHTML = convertToDevanagariPreservingHTML(cleanText);  // Clean first!
+    } else {
+        element.innerHTML = cleanText;  // Use cleaned text
+    }
+});
 }
 
 document.addEventListener('keydown', function(event) {
@@ -228,7 +409,11 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
+
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('📄 DOM loaded, initializing sutta reader...');
+    
+    // Load core settings first
     loadAllSettings();
     
     if (localStorage.getItem('darkMode') === 'true') {
@@ -237,143 +422,40 @@ document.addEventListener('DOMContentLoaded', function() {
     
     document.body.classList.toggle('devanagari-script', currentView.devanagari);
     updateDisplay();
+    
+    // Load dictionary after main content is ready
+    //~ loadPaliDictionary(); // Add this line
 });
 
-
-
-function safeSegmentSentences(text, language) {
-    try {
-        if (!text || typeof text !== 'string') return [];
-        
-        // Different rules for different languages
-        if (language === 'pali') {
-            // Conservative Pali segmentation
-            return text.split(/(?<=[.!?]”?\s+)/)
-                      .map(s => s.trim())
-                      .filter(s => s.length > 5); // Minimum length
-        } else {
-            // English segmentation
-            return text.split(/(?<=[.!?])\s+/)
-                      .map(s => s.trim())
-                      .filter(s => s.length > 10);
-        }
-    } catch (error) {
-        console.warn('Sentence segmentation failed:', error);
-        return [text]; // Fallback: treat entire text as one sentence
-    }
-}
-
-function createSafeSentenceMapping(paragraphData) {
-    const paliSentences = safeSegmentSentences(
-        paragraphData.mula_pali.replace(/<[^>]*>/g, ''),
-        'pali'
-    );
-    
-    const englishSentences = safeSegmentSentences(
-        paragraphData.mula_english,
-        'english'
-    );
-    
-    // If counts differ significantly, fall back to paragraph-level
-    if (Math.abs(paliSentences.length - englishSentences.length) > 2) {
-        console.warn(`Sentence count mismatch in paragraph ${paragraphData.paragraph_number}: Pali=${paliSentences.length}, English=${englishSentences.length}`);
-        return null; // Indicate mapping failed
+function showDictionary(word, x, y) {
+    // Remove existing dictionary
+    if (currentDictElement) {
+        currentDictElement.remove();
     }
     
-    // Create mapping with bounds checking
-    const maxLength = Math.max(paliSentences.length, englishSentences.length);
-    const mapping = [];
+    const definition = lookupPaliWord(word);
+    if (!definition) return;
     
-    for (let i = 0; i < maxLength; i++) {
-        mapping.push({
-            pali: paliSentences[i] || '',
-            english: englishSentences[i] || '',
-            id: `${paragraphData.paragraph_number}.${i + 1}`,
-            reliable: !!(paliSentences[i] && englishSentences[i])
-        });
-    }
+    // Create dictionary element
+    currentDictElement = document.createElement('div');
+    currentDictElement.className = 'dictionary-panel';
     
-    return mapping;
-}
-
-
-function enhanceParagraphWithInteractiveSentences(paragraphElement, paragraphData) {
-    const mapping = createSafeSentenceMapping(paragraphData);
+    // Use innerHTML to render the definition as HTML
+    currentDictElement.innerHTML = `
+        <div class="dict-word">${word}</div>
+        <div class="dict-definition">${definition}</div>
+    `;
     
-    // If mapping failed, add a subtle indicator and bail out
-    if (!mapping || mapping.length === 0) {
-        paragraphElement.classList.add('sentence-mapping-unavailable');
-        return;
-    }
+    // Force background and visibility
+    currentDictElement.style.background = 'white';
+    currentDictElement.style.color = 'black';
+    currentDictElement.style.border = '2px solid red'; // Temporary to see borders
+    currentDictElement.style.position = 'fixed';
+    currentDictElement.style.left = x + 'px';
+    currentDictElement.style.top = y + 'px';
+    currentDictElement.style.zIndex = '10000';
     
-    const englishSection = paragraphElement.querySelector('.translation-text');
-    const paliSection = paragraphElement.querySelector('.pali-text');
+    document.body.appendChild(currentDictElement);
     
-    if (!englishSection || !paliSection) return;
-    
-    // Clear existing content
-    englishSection.innerHTML = '';
-    paliSection.innerHTML = '';
-    
-    // Build interactive sentences
-    mapping.forEach((sentence, index) => {
-        if (sentence.english) {
-            const engSentence = createInteractiveSentence(sentence, 'english', index);
-            englishSection.appendChild(engSentence);
-        }
-        
-        if (sentence.pali) {
-            const paliSentence = createInteractiveSentence(sentence, 'pali', index);
-            paliSection.appendChild(paliSentence);
-        }
-    });
-    
-    paragraphElement.classList.add('sentence-mapping-available');
-}
-
-function createInteractiveSentence(sentenceData, language, index) {
-    const span = document.createElement('span');
-    span.className = `sentence ${language}-sentence`;
-    span.dataset.sentenceId = sentenceData.id;
-    span.dataset.language = language;
-    span.dataset.counterpartId = sentenceData.id;
-    
-    if (!sentenceData.reliable) {
-        span.classList.add('unreliable-mapping');
-        span.title = 'Sentence mapping may be inaccurate';
-    }
-    
-    span.textContent = language === 'pali' ? sentenceData.pali : sentenceData.english;
-    
-    return span;
-}
-
-// Main enhancement function
-function enhanceSuttaWithSentenceMapping() {
-    const paragraphs = document.querySelectorAll('.paragraph');
-    let successCount = 0;
-    let totalCount = 0;
-    
-    paragraphs.forEach(paragraph => {
-        totalCount++;
-        const paragraphNumber = paragraph.querySelector('.paragraph-number')?.textContent;
-        const paragraphData = getParagraphData(paragraphNumber); // You'd need to implement this
-        
-        if (paragraphData) {
-            const success = enhanceParagraphWithInteractiveSentences(paragraph, paragraphData);
-            if (success) successCount++;
-        }
-    });
-    
-    console.log(`Sentence mapping: ${successCount}/${totalCount} paragraphs enhanced`);
-    
-    // Add global hover handlers only if we have successful mappings
-    if (successCount > 0) {
-        initSentenceHoverHandlers();
-    }
-}
-
-// Only initialize if we have a reasonable success rate
-if (successCount > totalCount * 0.3) { // At least 30% success rate
-    initSentenceHoverHandlers();
+    console.log('Dictionary element styles:', window.getComputedStyle(currentDictElement).backgroundColor);
 }
